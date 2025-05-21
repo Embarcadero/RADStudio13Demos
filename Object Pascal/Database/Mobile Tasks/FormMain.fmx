@@ -1,0 +1,182 @@
+object MainFrm: TMainFrm
+  Left = 0
+  Top = 0
+  Caption = 'Tasks'
+  ClientHeight = 480
+  ClientWidth = 416
+  FormFactor.Width = 320
+  FormFactor.Height = 480
+  FormFactor.Devices = [Desktop]
+  OnCreate = FormCreate
+  OnDestroy = FormDestroy
+  DesignerMasterStyle = 0
+  object Grid1: TGrid
+    Align = Client
+    CanFocus = True
+    ClipChildren = True
+    Size.Width = 416.000000000000000000
+    Size.Height = 286.000000000000000000
+    Size.PlatformDefault = False
+    TabOrder = 2
+    Viewport.Width = 412.000000000000000000
+    Viewport.Height = 261.000000000000000000
+  end
+  object ToolBar1: TToolBar
+    Size.Width = 416.000000000000000000
+    Size.Height = 73.000000000000000000
+    Size.PlatformDefault = False
+    TabOrder = 5
+    object btnConnect: TButton
+      Position.X = 16.000000000000000000
+      Position.Y = 10.000000000000000000
+      Size.Width = 77.000000000000000000
+      Size.Height = 22.000000000000000000
+      Size.PlatformDefault = False
+      TabOrder = 0
+      Text = '&Connect'
+      OnClick = btnConnectClick
+    end
+    object btnDisconnect: TButton
+      Position.X = 101.000000000000000000
+      Position.Y = 10.000000000000000000
+      Size.Width = 77.000000000000000000
+      Size.Height = 22.000000000000000000
+      Size.PlatformDefault = False
+      TabOrder = 1
+      Text = '&Disconnect'
+      OnClick = btnDisconnectClick
+    end
+    object btnBackup: TButton
+      Position.X = 186.000000000000000000
+      Position.Y = 10.000000000000000000
+      Size.Width = 77.000000000000000000
+      Size.Height = 22.000000000000000000
+      Size.PlatformDefault = False
+      TabOrder = 3
+      Text = '&Backup'
+      OnClick = btnBackupClick
+    end
+    object btnRestore: TButton
+      Position.X = 271.000000000000000000
+      Position.Y = 10.000000000000000000
+      Size.Width = 77.000000000000000000
+      Size.Height = 22.000000000000000000
+      Size.PlatformDefault = False
+      TabOrder = 2
+      Text = '&Restore'
+      OnClick = btnRestoreClick
+    end
+    object Label1: TLabel
+      FocusControl = cbShowTasks
+      Position.X = 16.000000000000000000
+      Position.Y = 45.000000000000000000
+      Size.Width = 77.000000000000000000
+      Size.Height = 17.000000000000000000
+      Size.PlatformDefault = False
+      Text = '&Show Tasks:'
+      TabOrder = 4
+    end
+    object cbShowTasks: TComboBox
+      Items.Strings = (
+        'All'
+        'Completed'
+        'Not completed')
+      ItemIndex = 0
+      Position.X = 101.000000000000000000
+      Position.Y = 41.000000000000000000
+      Size.Width = 124.000000000000000000
+      Size.Height = 22.000000000000000000
+      Size.PlatformDefault = False
+      TabOrder = 5
+      OnChange = cbShowTasksChange
+    end
+  end
+  object NavigatorBindSourceDB1: TBindNavigator
+    Align = Bottom
+    Position.Y = 359.000000000000000000
+    Size.Width = 416.000000000000000000
+    Size.Height = 25.000000000000000000
+    Size.PlatformDefault = False
+    TabOrder = 6
+    DataSource = BindSourceDB1
+    xRadius = 4.000000000000000000
+    yRadius = 4.000000000000000000
+  end
+  object Memo1: TMemo
+    Touch.InteractiveGestures = [Pan, LongTap, DoubleTap]
+    DataDetectorTypes = []
+    Align = Bottom
+    Position.Y = 384.000000000000000000
+    Size.Width = 416.000000000000000000
+    Size.Height = 96.000000000000000000
+    Size.PlatformDefault = False
+    TabOrder = 10
+    Viewport.Width = 412.000000000000000000
+    Viewport.Height = 92.000000000000000000
+  end
+  object TasksQry: TFDQuery
+    Connection = MainDM.Conn
+    UpdateOptions.AssignedValues = [uvGeneratorName]
+    UpdateOptions.GeneratorName = 'GENTASKS_ID'
+    SQL.Strings = (
+      'SELECT * FROM TASKS'
+      '{if &mode} WHERE COMPLETED = &mode {fi}')
+    Left = 195
+    Top = 80
+    MacroData = <
+      item
+        Value = Null
+        Name = 'MODE'
+        DataType = mdIdentifier
+      end>
+    object TasksQryID: TIntegerField
+      AutoGenerateValue = arAutoInc
+      FieldName = 'ID'
+      Origin = 'ID'
+      ProviderFlags = [pfInUpdate, pfInWhere, pfInKey]
+      Required = True
+    end
+    object TasksQryDESCRIPTION: TStringField
+      FieldName = 'DESCRIPTION'
+      Origin = 'DESCRIPTION'
+      Size = 255
+    end
+    object TasksQryCOMPLETED: TBooleanField
+      FieldName = 'COMPLETED'
+      Origin = 'COMPLETED'
+    end
+  end
+  object BindSourceDB1: TBindSourceDB
+    DataSet = TasksQry
+    ScopeMappings = <>
+    Left = 192
+    Top = 144
+  end
+  object BindingsList1: TBindingsList
+    Methods = <>
+    OutputConverters = <>
+    Left = 76
+    Top = 77
+    object LinkGridToDataSourceBindSourceDB1: TLinkGridToDataSource
+      Category = 'Quick Bindings'
+      DataSource = BindSourceDB1
+      GridControl = Grid1
+      Columns = <
+        item
+          MemberName = 'ID'
+          Header = 'Task ID'
+        end
+        item
+          MemberName = 'COMPLETED'
+          Header = 'Completed'
+          TextWidth = 15
+          ColumnStyle = 'CheckColumn'
+        end
+        item
+          MemberName = 'DESCRIPTION'
+          Header = 'Description'
+          TextWidth = 40
+        end>
+    end
+  end
+end
