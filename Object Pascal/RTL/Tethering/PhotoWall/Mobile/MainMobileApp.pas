@@ -17,7 +17,8 @@ uses
   System.SysUtils, System.Types, System.UITypes, System.Classes, System.Variants, System.Permissions,
   FMX.Types, FMX.Controls, FMX.Forms, FMX.Graphics, FMX.Dialogs, FMX.Objects, System.Actions, FMX.ActnList,
   FMX.StdActns, FMX.MediaLibrary.Actions, FMX.StdCtrls, FMX.Layouts, FMX.ListBox, FMX.Ani, IPPeerClient, IPPeerServer,
-  System.Tether.Manager, System.Tether.AppProfile, System.Generics.Collections, FMX.Controls.Presentation;
+  System.Tether.Manager, System.Tether.AppProfile, System.Generics.Collections, FMX.Controls.Presentation,
+  FMX.MediaLibrary;
 
 type
   TForm49 = class(TForm)
@@ -55,7 +56,7 @@ type
     procedure DisplayRationale(Sender: TObject; const APermissions: TClassicStringDynArray; const APostRationaleProc: TProc);
 {$ENDIF}
     procedure FindWalls;
-    function SendImage: Boolean;
+    procedure SendImage;
     function CheckPhotoWalls: Boolean;
     procedure RefreshList;
   public
@@ -72,7 +73,7 @@ uses
 
 {$R *.fmx}
 
-function TForm49.SendImage: Boolean;
+procedure TForm49.SendImage;
 var
   LStream: TMemoryStream;
 begin
@@ -82,7 +83,7 @@ begin
     LStream := TMemoryStream.Create;
     try
       ImCaptured.Bitmap.SaveToStream(LStream);
-      Result := TakePhotoAppProfile.SendStream(TakePhotoManager.RemoteProfiles[LbWalls.ItemIndex], 'Photo from mobile', LStream);
+      TakePhotoAppProfile.SendStream(TakePhotoManager.RemoteProfiles[LbWalls.ItemIndex], 'Photo from mobile', LStream);
     finally
       LStream.Free;
     end;
