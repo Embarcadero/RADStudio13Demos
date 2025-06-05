@@ -17,16 +17,16 @@
   </asset>
   <library_images>
     <image id="Map__14_image-image" name="Map__14_image">
-      <init_from>file://Monkey_ambient.png</init_from>
+      <init_from>Monkey_ambient.png</init_from>
     </image>
     <image id="Map__13_image-image" name="Map__13_image">
-      <init_from>file://Monkey_diff.png</init_from>
+      <init_from>Monkey_diff.png</init_from>
     </image>
     <image id="Map__12_image-image" name="Map__12_image">
-      <init_from>file://Monkey_nml.png</init_from>
+      <init_from>Monkey_nml.png</init_from>
     </image>
     <image id="Map__15_image-image" name="Map__15_image">
-      <init_from>file://Monkey_eye.png</init_from>
+      <init_from>Monkey_eye.png</init_from>
     </image>
   </library_images>
   <library_materials>
