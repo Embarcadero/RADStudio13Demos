@@ -58,23 +58,15 @@ type
 
 implementation
 
+{$INLINE AUTO}
+
 uses
   Winapi.Windows,
   Winapi.Foundation,                   // TPropertyValue
-  Winapi.CommonTypes,                  // for compiler inline hints (which I can no longer remove with $INLINE AUTO)
   Winapi.Microsoft.CommonTypes,        // IUIElement, ...
   Winapi.Microsoft.UI,                 // TColors, ...
   Winapi.Microsoft.UI.Xaml.Media,      // TSolidColorBrush, ...
   Winapi.Microsoft.UI.Xaml.ControlsRT; // XAML control types
-
-type
-  IUIElement = Winapi.Microsoft.CommonTypes.IUIElement;
-  IVector_1__IUIElement = Winapi.Microsoft.CommonTypes.IVector_1__IUIElement;
-  Input_IPointerRoutedEventArgs = Winapi.Microsoft.CommonTypes.Input_IPointerRoutedEventArgs;
-  IRoutedEventArgs = Winapi.Microsoft.CommonTypes.IRoutedEventArgs;
-  IFrameworkElement = Winapi.Microsoft.CommonTypes.IFrameworkElement;
-  HorizontalAlignment = Winapi.Microsoft.CommonTypes.HorizontalAlignment;
-  VerticalAlignment = Winapi.Microsoft.CommonTypes.VerticalAlignment;
 
 { TDerivedApp }
 

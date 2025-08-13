@@ -74,8 +74,6 @@ type
     ColorBoxButtonInactiveBackground: TColorBox;
     ColorBoxButtonInactiveForeground: TColorBox;
     Label9: TLabel;
-    procedure FormCreate(Sender: TObject);
-    procedure ActionMainMenuBar1Paint(Sender: TObject);
     procedure ColorBoxActiveSelect(Sender: TObject);
     procedure ColorBoxInActiveSelect(Sender: TObject);
     procedure ColorBoxActiveTextSelect(Sender: TObject);
@@ -91,10 +89,6 @@ type
     procedure SystemTitlebarButton1Paint(Sender: TObject);
     procedure SystemTitlebarButton1Click(Sender: TObject);
   private
-    FLastDWMColorizationColor: TColor;
-    procedure DWMColorizationColorChanged(var Message: TMessage); message WM_DWMCOLORIZATIONCOLORCHANGED;
-    procedure WMActivate(var Message: TWMActivate); message WM_ACTIVATE;
-    procedure UpdateControls;
     procedure DrawSymbol(ACanvas: TCanvas; ARect: TRect; FGColor, BGColor: TColor);
   public
     { Public declarations }
@@ -111,30 +105,22 @@ uses
 
 {$R *.dfm}
 
-procedure TFrmMain.ActionMainMenuBar1Paint(Sender: TObject);
-var
-  LColor: TColor;
-begin
-  if CustomTitleBar.Enabled and not CustomTitleBar.SystemColors then
-  begin
-    if Active then
-      LColor := CustomTitleBar.BackgroundColor
-    else
-      LColor := CustomTitleBar.InactiveBackgroundColor;
-    ActionMainMenuBar1.Canvas.Brush.Color := LColor;
-    ActionMainMenuBar1.Canvas.FillRect(ActionMainMenuBar1.ClientRect);
-  end;
-end;
-
 procedure TFrmMain.CheckBoxCustomColorsClick(Sender: TObject);
 begin
-  CustomTitleBar.SystemColors := not CheckBoxCustomColors.Checked;
-  CustomTitleBar.SystemButtons := not CheckBoxCustomColors.Checked;
-  if CustomTitleBar.SystemColors then
-    CustomTitleBar.InitTitleBarColors;
-  UpdateControls;
+  if not CheckBoxCustomColors.Checked then
+    CustomTitleBar.InitTitleBarColors
+  else
+  begin
+    CustomTitleBar.BackgroundColor := ColorBoxActive.Selected;
+    CustomTitleBar.ForegroundColor := ColorBoxActiveText.Selected;
+    CustomTitleBar.ButtonBackgroundColor := ColorBoxButtonBackground.Selected;
+    CustomTitleBar.ButtonForegroundColor := ColorBoxButtonForeground.Selected;
+    CustomTitleBar.ButtonInactiveBackgroundColor := ColorBoxButtonInactiveBackground.Selected;
+    CustomTitleBar.ButtonInactiveForegroundColor := ColorBoxButtonInactiveForeground.Selected;
+    CustomTitleBar.InactiveBackgroundColor := ColorBoxInActive.Selected;
+    CustomTitleBar.InactiveForegroundColor := ColorBoxInActiveText.Selected;
+  end;
   CustomTitleBar.Invalidate;
-  ActionMainMenuBar1.Invalidate;
 end;
 
 procedure TFrmMain.CheckBoxOnPaintClick(Sender: TObject);
@@ -144,101 +130,56 @@ end;
 
 procedure TFrmMain.ColorBoxActiveSelect(Sender: TObject);
 begin
-  if CustomTitleBar.Enabled and not CustomTitleBar.SystemColors then
+  if CustomTitleBar.Enabled and CheckBoxCustomColors.Checked then
   begin
     CustomTitleBar.BackgroundColor := ColorBoxActive.Selected;
-    UpdateControls;
     CustomTitleBar.Invalidate;
-    ActionMainMenuBar1.Invalidate;
   end;
 end;
 
 procedure TFrmMain.ColorBoxActiveTextSelect(Sender: TObject);
 begin
-  if CustomTitleBar.Enabled and not CustomTitleBar.SystemColors then
+  if CustomTitleBar.Enabled and CheckBoxCustomColors.Checked then
   begin
     CustomTitleBar.ForegroundColor := ColorBoxActiveText.Selected;
-    UpdateControls;
     CustomTitleBar.Invalidate;
-    ActionMainMenuBar1.Invalidate;
   end;
 end;
 
 procedure TFrmMain.ColorBoxButtonBackgroundSelect(Sender: TObject);
 begin
-  if CustomTitleBar.Enabled and not CustomTitleBar.SystemColors then
-  begin
+  if CustomTitleBar.Enabled and CheckBoxCustomColors.Checked then
     CustomTitleBar.ButtonBackgroundColor := ColorBoxButtonBackground.Selected;
-    UpdateControls;
-  end;
 end;
 
 procedure TFrmMain.ColorBoxButtonForegroundSelect(Sender: TObject);
 begin
-  if CustomTitleBar.Enabled and not CustomTitleBar.SystemColors then
-  begin
+  if CustomTitleBar.Enabled and CheckBoxCustomColors.Checked then
     CustomTitleBar.ButtonForegroundColor := ColorBoxButtonForeground.Selected;
-    UpdateControls;
-  end;
 end;
 
 procedure TFrmMain.ColorBoxButtonInactiveBackgroundSelect(Sender: TObject);
 begin
-  if CustomTitleBar.Enabled and not CustomTitleBar.SystemColors then
-  begin
+  if CustomTitleBar.Enabled and CheckBoxCustomColors.Checked then
     CustomTitleBar.ButtonInactiveBackgroundColor := ColorBoxButtonInactiveBackground.Selected;
-    UpdateControls;
-  end;
 end;
 
 procedure TFrmMain.ColorBoxButtonInactiveForegroundSelect(Sender: TObject);
 begin
-  if CustomTitleBar.Enabled and not CustomTitleBar.SystemColors then
-  begin
+  if CustomTitleBar.Enabled and CheckBoxCustomColors.Checked then
     CustomTitleBar.ButtonInactiveForegroundColor := ColorBoxButtonInactiveForeground.Selected;
-    UpdateControls;
-  end;
 end;
 
 procedure TFrmMain.ColorBoxInActiveSelect(Sender: TObject);
 begin
-  if CustomTitleBar.Enabled and not CustomTitleBar.SystemColors then
-  begin
+  if CustomTitleBar.Enabled and CheckBoxCustomColors.Checked then
     CustomTitleBar.InactiveBackgroundColor := ColorBoxInActive.Selected;
-    UpdateControls;
-  end;
 end;
 
 procedure TFrmMain.ColorBoxInActiveTextSelect(Sender: TObject);
 begin
-  if CustomTitleBar.Enabled and not CustomTitleBar.SystemColors then
-  begin
+  if CustomTitleBar.Enabled and CheckBoxCustomColors.Checked then
     CustomTitleBar.InactiveForegroundColor := ColorBoxInActiveText.Selected;
-    UpdateControls;
-  end;
-
-end;
-
-procedure TFrmMain.DWMColorizationColorChanged(var Message: TMessage);
-begin
-  if CustomTitleBar.Enabled and CustomTitleBar.SystemColors and
-    (TColor(Message.WParam) <> FLastDWMColorizationColor) then
-  begin
-    FLastDWMColorizationColor := TColor(Message.WParam);
-    CustomTitleBar.InitTitleBarColors;
-    UpdateControls;
-    CustomTitleBar.Invalidate;
-    Message.Result := 0;
-  end;
-end;
-
-procedure TFrmMain.FormCreate(Sender: TObject);
-begin
-  FLastDWMColorizationColor := clNone;
-  for var i: Integer := 0 to ComponentCount - 1 do
-    if (Components[i].Tag = 1) and (Components[i] is TControl) then
-      TControl(Components[i]).Enabled := TOSVersion.Check(10);
-  UpdateControls;
 end;
 
 procedure TFrmMain.DrawSymbol(ACanvas: TCanvas; ARect: TRect; FGColor, BGColor: TColor);
@@ -355,63 +296,6 @@ begin
     TStyleManager.SystemStyle.DrawText(Canvas.Handle,
       TStyleManager.SystemStyle.GetElementDetails(twCaptionActive), s, LRect,
       LTextFormat, LTextOptions);
-  end;
-end;
-
-procedure TFrmMain.UpdateControls;
-begin
-  ToolBar16.HotTrackColor := ColorBlendRGB(StyleServices(Self).GetSystemColor(clHighlight), CustomTitleBar.BackgroundColor, 0.6);
-  ToolBar32.HotTrackColor := ToolBar16.HotTrackColor;
-  ToolBar16.Transparent := ((TOSVersion.Major = 6) and (TOSVersion.Minor = 1)) or (TOSVersion.Check(10) and CustomTitleBar.SystemColors);
-  ToolBar32.Transparent := ToolBar16.Transparent;
-  if not ToolBar16.Transparent then
-  begin
-    ToolBar16.GradientStartColor := CustomTitleBar.BackgroundColor;
-    ToolBar16.GradientEndColor := CustomTitleBar.BackgroundColor;
-  end;
-  if not ToolBar32.Transparent then
-  begin
-    ToolBar32.GradientStartColor := CustomTitleBar.BackgroundColor;
-    ToolBar32.GradientEndColor := CustomTitleBar.BackgroundColor;
-  end;
-  ActionMainMenuBar1.DoubleBuffered := True;
-  ActionMainMenuBar1.Transparent := ToolBar16.Transparent;
-  if not CustomTitleBar.SystemColors then
-  begin
-    ColorBoxActiveText.Selected := CustomTitleBar.ForegroundColor;
-    ColorBoxInActiveText.Selected := CustomTitleBar.InactiveForegroundColor;
-  end;
-
-  if TOSVersion.Check(10) and not CustomTitleBar.SystemColors then
-  begin
-    ColorBoxActive.Selected := CustomTitleBar.BackgroundColor;
-    ColorBoxInActive.Selected := CustomTitleBar.InactiveBackgroundColor;
-    ColorBoxButtonBackground.Selected := CustomTitleBar.ButtonBackgroundColor;
-    ColorBoxButtonForeground.Selected := CustomTitleBar.ButtonForegroundColor;
-    ColorBoxButtonInactiveBackground.Selected := CustomTitleBar.ButtonInactiveBackgroundColor;
-    ColorBoxButtonInactiveForeground.Selected := CustomTitleBar.ButtonInactiveForegroundColor;
-  end;
-end;
-
-procedure TFrmMain.WMActivate(var Message: TWMActivate);
-var
-  LColor : TColor;
-begin
-  inherited;
-  if CustomTitleBar.Enabled and Assigned(ActionMainMenuBar1) then
-    ActionMainMenuBar1.Invalidate;
-
-  if TOSVersion.Check(10) and CustomTitleBar.Enabled and not CustomTitleBar.SystemColors then
-  begin
-    if Active then
-      LColor := CustomTitleBar.BackgroundColor
-    else
-      LColor := CustomTitleBar.InactiveBackgroundColor;
-
-    ToolBar16.GradientStartColor := LColor;
-    ToolBar16.GradientEndColor := LColor;
-    ToolBar32.GradientStartColor := LColor;
-    ToolBar32.GradientEndColor := LColor;
   end;
 end;
 

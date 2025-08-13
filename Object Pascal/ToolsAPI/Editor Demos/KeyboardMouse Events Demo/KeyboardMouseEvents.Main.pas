@@ -1,4 +1,4 @@
-unit CodeEditorLineCellState.Main;
+unit KeyboardMouseEvents.Main;
 
 interface
 
@@ -14,8 +14,8 @@ uses
 type
   TStatusPanel = class(TCustomPanel)
   strict private
-    const ForegroundColor = clWhite;
-    const BackgroundColor = clWebDarkgreen;
+    const ForegroundColor = clWebSnow;
+    const BackgroundColor = clWebDarkSlategray;
   private
     FPaintBox: TPaintBox;
     FStatusMsg: string;
@@ -29,11 +29,18 @@ type
 
   TIDEWizard = class(TNotifierObject, IOTAWizard)
   private
-    FEditorEventsNotifier, FLastX, FLastY: Integer;
-    FWorking: Boolean;
+    FEditorEventsNotifier: Integer;
+    FLastKeyDownMsg, FLastKeyUpMsg: string;
+    FLastCaretPosMsg: string;
+
     procedure CheckStatusPanel(const Editor: TWinControl);
+    procedure UpdatePanelInfo(const Editor: TWinControl);
   protected
-    procedure EditorMouseMove(const Editor: TWinControl; Shift: TShiftState; X, Y: Integer);
+    procedure EditorMouseDownEx(const Editor: TWinControl; Button: TMouseButton; Shift: TShiftState; X, Y: Integer; var Handled: Boolean);
+    procedure EditorMouseUpEx(const Editor: TWinControl; Button: TMouseButton; Shift: TShiftState; X, Y: Integer; var Handled: Boolean);
+    procedure EditorSetCaretPos(const Editor: TWinControl; X, Y: Integer);
+    procedure EditorKeyDown(const Editor: TWinControl; Key: Word; Shift: TShiftState; var Handled: Boolean);
+    procedure EditorKeyUp(const Editor: TWinControl; Key: Word; Shift: TShiftState; var Handled: Boolean);
   public
     constructor Create;
     destructor Destroy; override;
@@ -76,8 +83,17 @@ begin
     FEditorEventsNotifier := LEditorServices.AddEditorEventsNotifier(LNotifier)
   else
     FEditorEventsNotifier := -1;
-  LNotifier.OnEditorMouseMove := EditorMouseMove;
+
+  LNotifier.OnEditorMouseDownEx := EditorMouseDownEx;
+  LNotifier.OnEditorMouseUpEx := EditorMouseUpEx;
+  LNotifier.OnEditorSetCaretPos := EditorSetCaretPos;
+  LNotifier.OnEditorKeyDown := EditorKeyDown;
+  LNotifier.OnEditorKeyUp := EditorKeyUp;
+  FLastKeyDownMsg := '';
+  FLastKeyUpMsg := '';
+  FLastCaretPosMsg:= '';
 end;
+
 
 destructor TIDEWizard.Destroy;
 begin
@@ -88,62 +104,40 @@ begin
   inherited;
 end;
 
-procedure TIDEWizard.EditorMouseMove(const Editor: TWinControl;
-  Shift: TShiftState; X, Y: Integer);
-var
-  Element, LineFlag: Integer;
+procedure TIDEWizard.EditorKeyDown(const Editor: TWinControl; Key: Word;
+  Shift: TShiftState; var Handled: Boolean);
 begin
-  if FWorking or ((X = FLastX) and (FLastY = Y)) then Exit;
-  FWorking := True;
-  try
-    CheckStatusPanel(Editor);
-    var LEditorServices: INTACodeEditorServices;
-    if Supports(BorlandIDEServices, INTACodeEditorServices, LEditorServices) then
-    begin
-      FLastX := X;
-      FLastY := Y;
-      var LView := LEditorServices.EditorState[Editor].View;
+  FLastKeyDownMsg := Format('Last KeyDown Event %d $%x Shift %s', [Key, Key, TValue.From(Shift).ToString]);
+  UpdatePanelInfo(Editor);
+end;
 
-      var Line := LView.Position.Row;
-      var Col := LView.Position.Column;
+procedure TIDEWizard.EditorKeyUp(const Editor: TWinControl; Key: Word;
+  Shift: TShiftState; var Handled: Boolean);
+begin
+  FLastKeyUpMsg := Format('Last KeyUp Event %d $%x Shift %s', [Key, Key, TValue.From(Shift).ToString]);
+  UpdatePanelInfo(Editor);
+end;
 
-      if not LEditorServices.EditorState[Editor].PointToCharacterPos(TPoint.Create(X, Y), Col, Line) or (Col = -1) then
-        Exit;
+procedure TIDEWizard.EditorMouseDownEx(const Editor: TWinControl;
+  Button: TMouseButton; Shift: TShiftState; X, Y: Integer;
+  var Handled: Boolean);
+begin
 
-      var LineState := LEditorServices.EditorState[Editor].LineState[Line];
-      var LineStateStr := TValue.From(LineState.State).ToString;
+end;
 
-      var CellState := LineState.CellState[Col];
-      var CellStateStr := TValue.From(CellState).ToString;
-      var LElidedLine := BoolToStr(LEditorServices.EditorState[Editor].LogicalLineState[Line].IsElidedLine, True);
 
-      var EdPos: TOTAEditPos;
-      EdPos.Col := Col;
-      EdPos.Line := Line;
-      LView.GetAttributeAtPos(EdPos, True, Element, LineFlag);
-      var LToken := '';
-      var LSavedPos:= LView.GetCursorPos;
-      try
-        var LEditPos: TOTAEditPos;
-        LEditPos.Col := Col;
-        LEditPos.Line := Line;
+procedure TIDEWizard.EditorMouseUpEx(const Editor: TWinControl;
+  Button: TMouseButton; Shift: TShiftState; X, Y: Integer;
+  var Handled: Boolean);
+begin
 
-        LView.SetCursorPos(LEditPos);
-        LToken := LEditorServices.EditorState[Editor].EditorToken;
-      finally
-        LView.SetCursorPos(LSavedPos);
-      end;
+end;
 
-      var LStrMsg := Format('Line: %d, Col: %d, Token: %s, Element: %s, Line State: %s, Cell State: %s IsElidedLine: %s',
-        [Line, Col, LToken, OTASyntaxCodeToStr(Element), LineStateStr, CellStateStr, LElidedLine]);
-
-      var LPanel := TStatusPanel.GetStatusPanel(LView.GetEditWindow);
-      if LPanel <> nil then
-        LPanel.StatusMsg := LStrMsg;
-    end;
-  finally
-    FWorking := False;
-  end;
+procedure TIDEWizard.EditorSetCaretPos(const Editor: TWinControl; X,
+  Y: Integer);
+begin
+  FLastCaretPosMsg := Format('Last Caret Pos Event Colum %d LineNum %d', [X, Y]);
+  UpdatePanelInfo(Editor);
 end;
 
 procedure TIDEWizard.Execute;
@@ -152,12 +146,12 @@ end;
 
 function TIDEWizard.GetIDString: string;
 begin
-  Result := '[4F686B16-28A3-43E7-AD9F-FE72EAA84ADA]';
+  Result := '[60DB63CF-0AE7-4865-AF0B-AA2CF0A60A89]';
 end;
 
 function TIDEWizard.GetName: string;
 begin
-  Result := 'CodeEditor.LineCellState.Demo';
+  Result := 'CodeEditor.KeyboardMouse.Demo';
 end;
 
 function TIDEWizard.GetState: TWizardState;
@@ -165,11 +159,25 @@ begin
   Result := [wsEnabled];
 end;
 
+procedure TIDEWizard.UpdatePanelInfo(const Editor: TWinControl);
+begin
+  CheckStatusPanel(Editor);
+  var LEditorServices: INTACodeEditorServices;
+  if Supports(BorlandIDEServices, INTACodeEditorServices, LEditorServices) then
+  begin
+    var LView := LEditorServices.EditorState[Editor].View;
+    var LStrMsg := Format('%s %s %s', [FLastKeyDownMsg, FLastKeyUpMsg, FLastCaretPosMsg]);
+    var LPanel := TStatusPanel.GetStatusPanel(LView.GetEditWindow);
+    if LPanel <> nil then
+      LPanel.StatusMsg := LStrMsg;
+  end;
+end;
+
 { TCodeEditorNotifier }
 
 function TCodeEditorNotifier.AllowedEvents: TCodeEditorEvents;
 begin
-  Result := [cevMouseEvents];
+  Result := [cevMouseEvents, cevKeyboardEvents];
 end;
 
 { TStatusPanel }
@@ -227,7 +235,8 @@ end;
 procedure TStatusPanel.SetStatusMsg(const Value: string);
 begin
   FStatusMsg := Value;
-  FPaintBox.Invalidate;
+  if Assigned(FPaintBox) then
+    FPaintBox.Invalidate;
 end;
 
 end.

@@ -66,8 +66,6 @@ begin
 end;
 
 function IsElevated: Boolean;
-const
-  TokenElevation = TTokenInformationClass(20);
 var
   LTokenHandle: THandle;
   LLen: Cardinal;

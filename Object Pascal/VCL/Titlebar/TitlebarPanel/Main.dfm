@@ -10,16 +10,19 @@ object FrmMain: TFrmMain
   CustomTitleBar.Enabled = True
   CustomTitleBar.Height = 80
   CustomTitleBar.SystemHeight = False
-  CustomTitleBar.BackgroundColor = 11625216
-  CustomTitleBar.ForegroundColor = clWhite
+  CustomTitleBar.StyleColors = True
+  CustomTitleBar.SystemColors = False
+  CustomTitleBar.SystemButtons = False
+  CustomTitleBar.BackgroundColor = clWhite
+  CustomTitleBar.ForegroundColor = 65793
   CustomTitleBar.InactiveBackgroundColor = clWhite
   CustomTitleBar.InactiveForegroundColor = 10066329
-  CustomTitleBar.ButtonForegroundColor = clWhite
-  CustomTitleBar.ButtonBackgroundColor = 11625216
-  CustomTitleBar.ButtonHoverForegroundColor = clWhite
-  CustomTitleBar.ButtonHoverBackgroundColor = 8801024
-  CustomTitleBar.ButtonPressedForegroundColor = clWhite
-  CustomTitleBar.ButtonPressedBackgroundColor = 4663296
+  CustomTitleBar.ButtonForegroundColor = 65793
+  CustomTitleBar.ButtonBackgroundColor = clWhite
+  CustomTitleBar.ButtonHoverForegroundColor = 65793
+  CustomTitleBar.ButtonHoverBackgroundColor = 16053492
+  CustomTitleBar.ButtonPressedForegroundColor = 65793
+  CustomTitleBar.ButtonPressedBackgroundColor = 15395562
   CustomTitleBar.ButtonInactiveForegroundColor = 10066329
   CustomTitleBar.ButtonInactiveBackgroundColor = clWhite
   DoubleBuffered = True
@@ -30,11 +33,8 @@ object FrmMain: TFrmMain
   Font.Style = []
   GlassFrame.Enabled = True
   GlassFrame.Top = 80
-  OldCreateOrder = False
   Position = poScreenCenter
   StyleElements = [seFont, seClient]
-  OnCreate = FormCreate
-  PixelsPerInch = 96
   TextHeight = 13
   object TitleBarPanel1: TTitleBarPanel
     Left = 0
@@ -45,13 +45,10 @@ object FrmMain: TFrmMain
     CustomButtons = <
       item
         ButtonType = sbCustom
-        Enabled = True
         Width = 32
-        Visible = True
         OnPaint = SystemTitlebarButton1Paint
         OnClick = SystemTitlebarButton1Click
       end>
-    ExplicitWidth = 729
     DesignSize = (
       768
       79)
@@ -75,7 +72,6 @@ object FrmMain: TFrmMain
       Font.Name = 'Segoe UI'
       Font.Style = []
       Spacing = 0
-      OnPaint = ActionMainMenuBar1Paint
     end
     object ToolBar16: TToolBar
       Left = 478
@@ -87,11 +83,10 @@ object FrmMain: TFrmMain
       ButtonHeight = 24
       Caption = 'ToolBar16'
       DoubleBuffered = False
-      DrawingStyle = dsGradient
       Images = VirtualImageList16
       ParentDoubleBuffered = False
       TabOrder = 1
-      ExplicitLeft = 439
+      Transparent = True
       object ToolButton1: TToolButton
         Left = 0
         Top = 0
@@ -131,7 +126,6 @@ object FrmMain: TFrmMain
       ButtonWidth = 39
       Caption = 'ToolBar1'
       DoubleBuffered = False
-      DrawingStyle = dsGradient
       Images = VirtualImageList32
       ParentDoubleBuffered = False
       TabOrder = 2
@@ -174,7 +168,7 @@ object FrmMain: TFrmMain
     Align = alClient
     BevelOuter = bvNone
     TabOrder = 1
-    ExplicitWidth = 729
+    ExplicitTop = 82
     object Label3: TLabel
       Tag = 1
       Left = 12
@@ -251,6 +245,7 @@ object FrmMain: TFrmMain
       Top = 48
       Width = 120
       Height = 22
+      Selected = clSkyBlue
       Style = [cbStandardColors, cbExtendedColors, cbSystemColors, cbCustomColor, cbPrettyNames, cbCustomColors]
       TabOrder = 0
       OnSelect = ColorBoxActiveSelect
@@ -270,6 +265,7 @@ object FrmMain: TFrmMain
       Top = 49
       Width = 120
       Height = 22
+      Selected = clSilver
       Style = [cbStandardColors, cbExtendedColors, cbSystemColors, cbCustomColor, cbPrettyNames, cbCustomColors]
       TabOrder = 2
       OnSelect = ColorBoxInActiveSelect
@@ -307,6 +303,7 @@ object FrmMain: TFrmMain
       Top = 161
       Width = 120
       Height = 22
+      Selected = clSkyBlue
       Style = [cbStandardColors, cbExtendedColors, cbSystemColors, cbCustomColor, cbPrettyNames, cbCustomColors]
       TabOrder = 6
       OnSelect = ColorBoxButtonBackgroundSelect
@@ -327,6 +324,7 @@ object FrmMain: TFrmMain
       Top = 161
       Width = 120
       Height = 22
+      Selected = clSilver
       Style = [cbStandardColors, cbExtendedColors, cbSystemColors, cbCustomColor, cbPrettyNames, cbCustomColors]
       TabOrder = 8
       OnSelect = ColorBoxButtonInactiveBackgroundSelect
@@ -473,8 +471,8 @@ object FrmMain: TFrmMain
           end>
         ActionBar = ActionMainMenuBar1
       end>
-    Left = 600
-    Top = 270
+    Left = 592
+    Top = 278
     StyleName = 'Platform Default'
     object DialogOpenPicture1: TOpenPicture
       Category = 'Dialog'
@@ -652,48 +650,40 @@ object FrmMain: TFrmMain
   end
   object VirtualImageList16: TVirtualImageList
     AutoFill = True
-    DisabledGrayscale = False
-    DisabledSuffix = '_Disabled'
     Images = <
       item
         CollectionIndex = 0
         CollectionName = 'AboutBox'
-        Disabled = False
         Name = 'AboutBox'
       end
       item
         CollectionIndex = 1
         CollectionName = 'FireMonkey-Metropolis-UI'
-        Disabled = False
         Name = 'FireMonkey-Metropolis-UI'
       end
       item
         CollectionIndex = 2
         CollectionName = 'Type'
-        Disabled = False
         Name = 'Type'
       end
       item
         CollectionIndex = 3
         CollectionName = 'Unit32'
-        Disabled = False
         Name = 'Unit32'
       end
       item
         CollectionIndex = 4
         CollectionName = 'VCL-Metropolis-UI'
-        Disabled = False
         Name = 'VCL-Metropolis-UI'
       end
       item
         CollectionIndex = 5
         CollectionName = 'Web-Server'
-        Disabled = False
         Name = 'Web-Server'
       end>
     ImageCollection = ImageCollection1
-    Left = 600
-    Top = 216
+    Left = 592
+    Top = 208
   end
   object ImageCollection1: TImageCollection
     Images = <
@@ -883,49 +873,41 @@ object FrmMain: TFrmMain
   end
   object VirtualImageList32: TVirtualImageList
     AutoFill = True
-    DisabledGrayscale = False
-    DisabledSuffix = '_Disabled'
     Images = <
       item
         CollectionIndex = 0
         CollectionName = 'AboutBox'
-        Disabled = False
         Name = 'AboutBox'
       end
       item
         CollectionIndex = 1
         CollectionName = 'FireMonkey-Metropolis-UI'
-        Disabled = False
         Name = 'FireMonkey-Metropolis-UI'
       end
       item
         CollectionIndex = 2
         CollectionName = 'Type'
-        Disabled = False
         Name = 'Type'
       end
       item
         CollectionIndex = 3
         CollectionName = 'Unit32'
-        Disabled = False
         Name = 'Unit32'
       end
       item
         CollectionIndex = 4
         CollectionName = 'VCL-Metropolis-UI'
-        Disabled = False
         Name = 'VCL-Metropolis-UI'
       end
       item
         CollectionIndex = 5
         CollectionName = 'Web-Server'
-        Disabled = False
         Name = 'Web-Server'
       end>
     ImageCollection = ImageCollection1
     Width = 32
     Height = 32
-    Left = 656
-    Top = 208
+    Left = 592
+    Top = 136
   end
 end
