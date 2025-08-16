@@ -113,9 +113,11 @@ void __fastcall TMainForm::UpdateTreeView() {
 			FItemCellReturn->IsChecked = (StringGrid1->Model->CellReturnAction != TCellReturnAction::None);
 			FDefaultDrawing->IsChecked = StringGrid1->DefaultDrawing;
 		}
-		__finally {
+		catch(...) {
 			FTreeUpdating = False;
+			throw;      
 		}
+		FTreeUpdating = False;
 	}
 }
 
