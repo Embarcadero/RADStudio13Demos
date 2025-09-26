@@ -1,0 +1,95 @@
+object Frm_ImageMain: TFrm_ImageMain
+  Left = 0
+  Top = 0
+  Caption = 'FMX Image generation (Gemini)'
+  ClientHeight = 654
+  ClientWidth = 895
+  FormFactor.Width = 320
+  FormFactor.Height = 480
+  FormFactor.Devices = [Desktop]
+  OnCreate = FormCreate
+  OnResize = FormResize
+  DesignerMasterStyle = 0
+  object Panel1: TPanel
+    Align = Top
+    Size.Width = 895.000000000000000000
+    Size.Height = 41.000000000000000000
+    Size.PlatformDefault = False
+    TabOrder = 0
+    object Edit1: TEdit
+      Touch.InteractiveGestures = [LongTap, DoubleTap]
+      Align = Client
+      TabOrder = 0
+      Text = 
+        'a cabin in a forest by a lake with a sunset, realistic, digital ' +
+        'painting, artstation'
+      Size.Width = 623.000000000000000000
+      Size.Height = 41.000000000000000000
+      Size.PlatformDefault = False
+    end
+    object BtnGenerate: TButton
+      Align = Right
+      Position.X = 759.000000000000000000
+      Size.Width = 136.000000000000000000
+      Size.Height = 41.000000000000000000
+      Size.PlatformDefault = False
+      TabOrder = 2
+      Text = 'Generate Image'
+      OnClick = BtnGenerateClick
+    end
+    object BtnCancel: TButton
+      Align = Right
+      Position.X = 623.000000000000000000
+      Size.Width = 136.000000000000000000
+      Size.Height = 41.000000000000000000
+      Size.PlatformDefault = False
+      TabOrder = 1
+      Text = 'Cancel'
+      OnClick = BtnCancelClick
+    end
+  end
+  object Image1: TImage
+    MultiResBitmap = <
+      item
+      end>
+    Align = Client
+    Size.Width = 895.000000000000000000
+    Size.Height = 435.000000000000000000
+    Size.PlatformDefault = False
+  end
+  object Memo1: TMemo
+    Touch.InteractiveGestures = [Pan, LongTap, DoubleTap]
+    DataDetectorTypes = []
+    Align = Bottom
+    Position.Y = 476.000000000000000000
+    Size.Width = 895.000000000000000000
+    Size.Height = 178.000000000000000000
+    Size.PlatformDefault = False
+    TabOrder = 4
+    Viewport.Width = 895.000000000000000000
+    Viewport.Height = 178.000000000000000000
+  end
+  object AniIndicator1: TAniIndicator
+    Position.X = 416.000000000000000000
+    Position.Y = 240.000000000000000000
+  end
+  object AIConnection1: TAIConnection
+    Driver = AIGeminiDriver1
+    Left = 815
+    Top = 256
+  end
+  object AIImageRequest1: TAIImageRequest
+    Connection = AIConnection1
+    OnSuccess = AIImageRequest1Success
+    OnError = AIImageRequest1Error
+    Left = 811
+    Top = 364
+  end
+  object AIGeminiDriver1: TAIGeminiDriver
+    Params.Strings = (
+      'Model=gemini-2.5-flash-image-preview')
+    OnCancel = AIGeminiDriver1Cancel
+    Left = 815
+    Top = 309
+  end
+end

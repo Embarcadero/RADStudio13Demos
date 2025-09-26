@@ -1,0 +1,78 @@
+object Frm_ChatMain: TFrm_ChatMain
+  Left = 0
+  Top = 0
+  Caption = 'FMX Chat (OpenAI)'
+  ClientHeight = 438
+  ClientWidth = 643
+  FormFactor.Width = 320
+  FormFactor.Height = 480
+  FormFactor.Devices = [Desktop]
+  DesignerMasterStyle = 0
+  object Panel1: TPanel
+    Align = Top
+    Size.Width = 643.000000000000000000
+    Size.Height = 45.000000000000000000
+    Size.PlatformDefault = False
+    TabOrder = 3
+    object Edit1: TEdit
+      Touch.InteractiveGestures = [LongTap, DoubleTap]
+      Align = Client
+      TabOrder = 0
+      Text = 'Say hello in one sentence.'
+      Size.Width = 339.000000000000000000
+      Size.Height = 45.000000000000000000
+      Size.PlatformDefault = False
+    end
+    object BtnSend: TButton
+      Align = Right
+      Position.X = 491.000000000000000000
+      Size.Width = 152.000000000000000000
+      Size.Height = 45.000000000000000000
+      Size.PlatformDefault = False
+      TabOrder = 2
+      Text = 'Send Chat'
+      OnClick = BtnSendClick
+    end
+    object BtnCancel: TButton
+      Align = Right
+      Position.X = 339.000000000000000000
+      Size.Width = 152.000000000000000000
+      Size.Height = 45.000000000000000000
+      Size.PlatformDefault = False
+      TabOrder = 1
+      Text = 'Cancel'
+      OnClick = BtnCancelClick
+    end
+  end
+  object Memo1: TMemo
+    Touch.InteractiveGestures = [Pan, LongTap, DoubleTap]
+    DataDetectorTypes = []
+    Align = Client
+    Size.Width = 643.000000000000000000
+    Size.Height = 393.000000000000000000
+    Size.PlatformDefault = False
+    TabOrder = 4
+    Viewport.Width = 639.000000000000000000
+    Viewport.Height = 389.000000000000000000
+  end
+  object AIConnection: TAIConnection
+    Driver = AIOpenAIDriver
+    Left = 512
+    Top = 144
+  end
+  object AIOpenAIDriver: TAIOpenAIDriver
+    Params.Strings = (
+      'Model=gpt-4o-mini')
+    OnCancel = AIOpenAIDriverCancel
+    Left = 512
+    Top = 208
+  end
+  object AIChatRequest1: TAIChatRequest
+    Connection = AIConnection
+    OnResponse = AIChatRequest1Response
+    OnError = AIChatRequest1Error
+    OnFullResponse = AIChatRequest1FullResponse
+    Left = 512
+    Top = 280
+  end
+end

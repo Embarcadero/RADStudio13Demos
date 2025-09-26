@@ -1,0 +1,180 @@
+﻿<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+    <PropertyGroup>
+        <ProjectGuid>{E89C4532-48F8-46E7-BEBA-5EDF99C7E184}</ProjectGuid>
+    </PropertyGroup>
+    <ItemGroup>
+        <Projects Include="Console\SmartCoreAI_Console_Demo.dproj">
+            <Dependencies/>
+        </Projects>
+        <Projects Include="VCL\Chat\OpenAI\Chat_OpenAI_VCL.dproj">
+            <Dependencies/>
+        </Projects>
+        <Projects Include="VCL\Chat\Claude\Chat_Claude_VCL.dproj">
+            <Dependencies/>
+        </Projects>
+        <Projects Include="VCL\Image\OpenAI\Image_OpenAI_VCL.dproj">
+            <Dependencies/>
+        </Projects>
+        <Projects Include="VCL\Image\Gemini\Image_Gemini_VCL.dproj">
+            <Dependencies/>
+        </Projects>
+        <Projects Include="VCL\JSON\OpenAI\JSON_OpenAI_VCL.dproj">
+            <Dependencies/>
+        </Projects>
+        <Projects Include="VCL\JSON\Gemini\JSON_Gemini_VCL.dproj">
+            <Dependencies/>
+        </Projects>
+        <Projects Include="VCL\LiveBindings\SmartCoreAI_LiveBindings_Demo.dproj">
+            <Dependencies/>
+        </Projects>
+        <Projects Include="VCL\Stream\OpenAI\Stream_OpenAI_VCL.dproj">
+            <Dependencies/>
+        </Projects>
+        <Projects Include="FMX\Chat\OpenAI\Chat_OpenAI_FMX.dproj">
+            <Dependencies/>
+        </Projects>
+        <Projects Include="FMX\Image\OpenAI\Image_OpenAI_FMX.dproj">
+            <Dependencies/>
+        </Projects>
+        <Projects Include="FMX\Image\Gemini\Image_Gemini_FMX.dproj">
+            <Dependencies/>
+        </Projects>
+        <Projects Include="FMX\JSON\JSON_OpenAI_FMX.dproj">
+            <Dependencies/>
+        </Projects>
+    </ItemGroup>
+    <ProjectExtensions>
+        <Borland.Personality>Default.Personality.12</Borland.Personality>
+        <Borland.ProjectType/>
+        <BorlandProject>
+            <Default.Personality/>
+        </BorlandProject>
+    </ProjectExtensions>
+    <Target Name="SmartCoreAI_Console_Demo">
+        <MSBuild Projects="Console\SmartCoreAI_Console_Demo.dproj"/>
+    </Target>
+    <Target Name="SmartCoreAI_Console_Demo:Clean">
+        <MSBuild Projects="Console\SmartCoreAI_Console_Demo.dproj" Targets="Clean"/>
+    </Target>
+    <Target Name="SmartCoreAI_Console_Demo:Make">
+        <MSBuild Projects="Console\SmartCoreAI_Console_Demo.dproj" Targets="Make"/>
+    </Target>
+    <Target Name="Chat_OpenAI_VCL">
+        <MSBuild Projects="VCL\Chat\OpenAI\Chat_OpenAI_VCL.dproj"/>
+    </Target>
+    <Target Name="Chat_OpenAI_VCL:Clean">
+        <MSBuild Projects="VCL\Chat\OpenAI\Chat_OpenAI_VCL.dproj" Targets="Clean"/>
+    </Target>
+    <Target Name="Chat_OpenAI_VCL:Make">
+        <MSBuild Projects="VCL\Chat\OpenAI\Chat_OpenAI_VCL.dproj" Targets="Make"/>
+    </Target>
+    <Target Name="Chat_Claude_VCL">
+        <MSBuild Projects="VCL\Chat\Claude\Chat_Claude_VCL.dproj"/>
+    </Target>
+    <Target Name="Chat_Claude_VCL:Clean">
+        <MSBuild Projects="VCL\Chat\Claude\Chat_Claude_VCL.dproj" Targets="Clean"/>
+    </Target>
+    <Target Name="Chat_Claude_VCL:Make">
+        <MSBuild Projects="VCL\Chat\Claude\Chat_Claude_VCL.dproj" Targets="Make"/>
+    </Target>
+    <Target Name="Image_OpenAI_VCL">
+        <MSBuild Projects="VCL\Image\OpenAI\Image_OpenAI_VCL.dproj"/>
+    </Target>
+    <Target Name="Image_OpenAI_VCL:Clean">
+        <MSBuild Projects="VCL\Image\OpenAI\Image_OpenAI_VCL.dproj" Targets="Clean"/>
+    </Target>
+    <Target Name="Image_OpenAI_VCL:Make">
+        <MSBuild Projects="VCL\Image\OpenAI\Image_OpenAI_VCL.dproj" Targets="Make"/>
+    </Target>
+    <Target Name="Image_Gemini_VCL">
+        <MSBuild Projects="VCL\Image\Gemini\Image_Gemini_VCL.dproj"/>
+    </Target>
+    <Target Name="Image_Gemini_VCL:Clean">
+        <MSBuild Projects="VCL\Image\Gemini\Image_Gemini_VCL.dproj" Targets="Clean"/>
+    </Target>
+    <Target Name="Image_Gemini_VCL:Make">
+        <MSBuild Projects="VCL\Image\Gemini\Image_Gemini_VCL.dproj" Targets="Make"/>
+    </Target>
+    <Target Name="JSON_OpenAI_VCL">
+        <MSBuild Projects="VCL\JSON\OpenAI\JSON_OpenAI_VCL.dproj"/>
+    </Target>
+    <Target Name="JSON_OpenAI_VCL:Clean">
+        <MSBuild Projects="VCL\JSON\OpenAI\JSON_OpenAI_VCL.dproj" Targets="Clean"/>
+    </Target>
+    <Target Name="JSON_OpenAI_VCL:Make">
+        <MSBuild Projects="VCL\JSON\OpenAI\JSON_OpenAI_VCL.dproj" Targets="Make"/>
+    </Target>
+    <Target Name="JSON_Gemini_VCL">
+        <MSBuild Projects="VCL\JSON\Gemini\JSON_Gemini_VCL.dproj"/>
+    </Target>
+    <Target Name="JSON_Gemini_VCL:Clean">
+        <MSBuild Projects="VCL\JSON\Gemini\JSON_Gemini_VCL.dproj" Targets="Clean"/>
+    </Target>
+    <Target Name="JSON_Gemini_VCL:Make">
+        <MSBuild Projects="VCL\JSON\Gemini\JSON_Gemini_VCL.dproj" Targets="Make"/>
+    </Target>
+    <Target Name="SmartCoreAI_LiveBindings_Demo">
+        <MSBuild Projects="VCL\LiveBindings\SmartCoreAI_LiveBindings_Demo.dproj"/>
+    </Target>
+    <Target Name="SmartCoreAI_LiveBindings_Demo:Clean">
+        <MSBuild Projects="VCL\LiveBindings\SmartCoreAI_LiveBindings_Demo.dproj" Targets="Clean"/>
+    </Target>
+    <Target Name="SmartCoreAI_LiveBindings_Demo:Make">
+        <MSBuild Projects="VCL\LiveBindings\SmartCoreAI_LiveBindings_Demo.dproj" Targets="Make"/>
+    </Target>
+    <Target Name="Stream_OpenAI_VCL">
+        <MSBuild Projects="VCL\Stream\OpenAI\Stream_OpenAI_VCL.dproj"/>
+    </Target>
+    <Target Name="Stream_OpenAI_VCL:Clean">
+        <MSBuild Projects="VCL\Stream\OpenAI\Stream_OpenAI_VCL.dproj" Targets="Clean"/>
+    </Target>
+    <Target Name="Stream_OpenAI_VCL:Make">
+        <MSBuild Projects="VCL\Stream\OpenAI\Stream_OpenAI_VCL.dproj" Targets="Make"/>
+    </Target>
+    <Target Name="Chat_OpenAI_FMX">
+        <MSBuild Projects="FMX\Chat\OpenAI\Chat_OpenAI_FMX.dproj"/>
+    </Target>
+    <Target Name="Chat_OpenAI_FMX:Clean">
+        <MSBuild Projects="FMX\Chat\OpenAI\Chat_OpenAI_FMX.dproj" Targets="Clean"/>
+    </Target>
+    <Target Name="Chat_OpenAI_FMX:Make">
+        <MSBuild Projects="FMX\Chat\OpenAI\Chat_OpenAI_FMX.dproj" Targets="Make"/>
+    </Target>
+    <Target Name="Image_OpenAI_FMX">
+        <MSBuild Projects="FMX\Image\OpenAI\Image_OpenAI_FMX.dproj"/>
+    </Target>
+    <Target Name="Image_OpenAI_FMX:Clean">
+        <MSBuild Projects="FMX\Image\OpenAI\Image_OpenAI_FMX.dproj" Targets="Clean"/>
+    </Target>
+    <Target Name="Image_OpenAI_FMX:Make">
+        <MSBuild Projects="FMX\Image\OpenAI\Image_OpenAI_FMX.dproj" Targets="Make"/>
+    </Target>
+    <Target Name="Image_Gemini_FMX">
+        <MSBuild Projects="FMX\Image\Gemini\Image_Gemini_FMX.dproj"/>
+    </Target>
+    <Target Name="Image_Gemini_FMX:Clean">
+        <MSBuild Projects="FMX\Image\Gemini\Image_Gemini_FMX.dproj" Targets="Clean"/>
+    </Target>
+    <Target Name="Image_Gemini_FMX:Make">
+        <MSBuild Projects="FMX\Image\Gemini\Image_Gemini_FMX.dproj" Targets="Make"/>
+    </Target>
+    <Target Name="JSON_OpenAI_FMX">
+        <MSBuild Projects="FMX\JSON\JSON_OpenAI_FMX.dproj"/>
+    </Target>
+    <Target Name="JSON_OpenAI_FMX:Clean">
+        <MSBuild Projects="FMX\JSON\JSON_OpenAI_FMX.dproj" Targets="Clean"/>
+    </Target>
+    <Target Name="JSON_OpenAI_FMX:Make">
+        <MSBuild Projects="FMX\JSON\JSON_OpenAI_FMX.dproj" Targets="Make"/>
+    </Target>
+    <Target Name="Build">
+        <CallTarget Targets="SmartCoreAI_Console_Demo;Chat_OpenAI_VCL;Chat_Claude_VCL;Image_OpenAI_VCL;Image_Gemini_VCL;JSON_OpenAI_VCL;JSON_Gemini_VCL;SmartCoreAI_LiveBindings_Demo;Stream_OpenAI_VCL;Chat_OpenAI_FMX;Image_OpenAI_FMX;Image_Gemini_FMX;JSON_OpenAI_FMX"/>
+    </Target>
+    <Target Name="Clean">
+        <CallTarget Targets="SmartCoreAI_Console_Demo:Clean;Chat_OpenAI_VCL:Clean;Chat_Claude_VCL:Clean;Image_OpenAI_VCL:Clean;Image_Gemini_VCL:Clean;JSON_OpenAI_VCL:Clean;JSON_Gemini_VCL:Clean;SmartCoreAI_LiveBindings_Demo:Clean;Stream_OpenAI_VCL:Clean;Chat_OpenAI_FMX:Clean;Image_OpenAI_FMX:Clean;Image_Gemini_FMX:Clean;JSON_OpenAI_FMX:Clean"/>
+    </Target>
+    <Target Name="Make">
+        <CallTarget Targets="SmartCoreAI_Console_Demo:Make;Chat_OpenAI_VCL:Make;Chat_Claude_VCL:Make;Image_OpenAI_VCL:Make;Image_Gemini_VCL:Make;JSON_OpenAI_VCL:Make;JSON_Gemini_VCL:Make;SmartCoreAI_LiveBindings_Demo:Make;Stream_OpenAI_VCL:Make;Chat_OpenAI_FMX:Make;Image_OpenAI_FMX:Make;Image_Gemini_FMX:Make;JSON_OpenAI_FMX:Make"/>
+    </Target>
+    <Import Project="$(BDS)\Bin\CodeGear.Group.Targets" Condition="Exists('$(BDS)\Bin\CodeGear.Group.Targets')"/>
+</Project>

@@ -1,0 +1,121 @@
+object Frm_JsonMain: TFrm_JsonMain
+  Left = 0
+  Top = 0
+  Caption = 'FMX Json(OpenAI)'
+  ClientHeight = 531
+  ClientWidth = 1005
+  FormFactor.Width = 320
+  FormFactor.Height = 480
+  FormFactor.Devices = [Desktop]
+  OnCreate = FormCreate
+  OnClose = FormClose
+  OnResize = FormResize
+  DesignerMasterStyle = 0
+  object Memo1: TMemo
+    Touch.InteractiveGestures = [Pan, LongTap, DoubleTap]
+    DataDetectorTypes = []
+    TextSettings.WordWrap = True
+    Align = Bottom
+    Position.Y = 376.000000000000000000
+    Size.Width = 1005.000000000000000000
+    Size.Height = 155.000000000000000000
+    Size.PlatformDefault = False
+    TabOrder = 5
+    Viewport.Width = 1001.000000000000000000
+    Viewport.Height = 151.000000000000000000
+  end
+  object Panel1: TPanel
+    Align = Top
+    Size.Width = 1005.000000000000000000
+    Size.Height = 41.000000000000000000
+    Size.PlatformDefault = False
+    TabOrder = 0
+    object Edit1: TEdit
+      Touch.InteractiveGestures = [LongTap, DoubleTap]
+      Align = Client
+      TabOrder = 0
+      Text = 
+        'Return array of any 5 cities with fields name (string), average_' +
+        'temperture (number), and number_ of_citizens (number). Only JSON' +
+        '-array.'
+      Size.Width = 733.000000000000000000
+      Size.Height = 41.000000000000000000
+      Size.PlatformDefault = False
+    end
+    object BtnSend: TButton
+      Align = Right
+      Position.X = 869.000000000000000000
+      Size.Width = 136.000000000000000000
+      Size.Height = 41.000000000000000000
+      Size.PlatformDefault = False
+      TabOrder = 2
+      Text = 'Send JSON Request'
+      OnClick = BtnSendClick
+    end
+    object BtnCancel: TButton
+      Align = Right
+      Position.X = 733.000000000000000000
+      Size.Width = 136.000000000000000000
+      Size.Height = 41.000000000000000000
+      Size.PlatformDefault = False
+      TabOrder = 1
+      Text = 'Cancel'
+      OnClick = BtnCancelClick
+    end
+  end
+  object Grid1: TGrid
+    Align = Client
+    CanFocus = True
+    ClipChildren = True
+    Size.Width = 1005.000000000000000000
+    Size.Height = 335.000000000000000000
+    Size.PlatformDefault = False
+    TabOrder = 6
+    Viewport.Width = 1001.000000000000000000
+    Viewport.Height = 310.000000000000000000
+  end
+  object AniIndicator1: TAniIndicator
+    Position.X = 392.000000000000000000
+    Position.Y = 200.000000000000000000
+    Size.Width = 81.000000000000000000
+    Size.Height = 65.000000000000000000
+    Size.PlatformDefault = False
+  end
+  object AIConnection1: TAIConnection
+    Driver = AIOpenAIDriver1
+    Left = 664
+    Top = 176
+  end
+  object AIOpenAIDriver1: TAIOpenAIDriver
+    Params.Strings = (
+      'Model=gpt-4o-mini')
+    OnCancel = AIOpenAIDriver1Cancel
+    Left = 664
+    Top = 304
+  end
+  object AIJSONRequest1: TAIJSONRequest
+    Connection = AIConnection1
+    DataSet = FDMemTable1
+    OnSuccess = AIJSONRequest1Success
+    OnError = AIJSONRequest1Error
+    Endpoint = '/responses'
+    Left = 660
+    Top = 232
+  end
+  object DataSource1: TDataSource
+    DataSet = FDMemTable1
+    Left = 560
+    Top = 176
+  end
+  object FDMemTable1: TFDMemTable
+    FetchOptions.AssignedValues = [evMode]
+    FetchOptions.Mode = fmAll
+    ResourceOptions.AssignedValues = [rvSilentMode]
+    ResourceOptions.SilentMode = True
+    UpdateOptions.AssignedValues = [uvCheckRequired, uvAutoCommitUpdates]
+    UpdateOptions.CheckRequired = False
+    UpdateOptions.AutoCommitUpdates = True
+    Left = 560
+    Top = 248
+  end
+end
