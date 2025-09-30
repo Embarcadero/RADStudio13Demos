@@ -8,7 +8,7 @@ uses
   SmartCoreAI.Comp.Connection, SmartCoreAI.Comp.Chat, SmartCoreAI.Types,
   SmartCoreAI.Driver.OpenAI, FMX.Controls.Presentation, FMX.StdCtrls,
   FMX.Memo.Types, FMX.ScrollBox, FMX.Memo, FMX.Edit, System.IniFiles,
-  System.IOUtils, FMX.DialogService.Sync;
+  System.IOUtils;
 
 type
   TFrm_ChatMain = class(TForm)
@@ -38,6 +38,10 @@ var
   Frm_ChatMain: TFrm_ChatMain;
 
 implementation
+{$IF NOT DEFINED(ANDROID)}
+uses
+  FMX.DialogService.Sync;
+{$ENDIF}
 
 {$R *.fmx}
 

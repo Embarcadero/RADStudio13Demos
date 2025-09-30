@@ -7,8 +7,8 @@ uses
   FMX.Types, FMX.Controls, FMX.Forms, FMX.Graphics, FMX.Dialogs,
   SmartCoreAI.Comp.Connection, SmartCoreAI.Comp.Image, SmartCoreAI.Types,
   SmartCoreAI.Driver.OpenAI, FMX.Objects, FMX.StdCtrls, FMX.Edit,
-  FMX.Controls.Presentation, System.IniFiles, System.IOUtils,
-  FMX.DialogService.Sync, FMX.Memo.Types, FMX.ScrollBox, FMX.Memo, System.JSON;
+  FMX.Controls.Presentation, System.IniFiles, System.IOUtils, FMX.Memo.Types,
+  FMX.ScrollBox, FMX.Memo, System.JSON;
 
 type
   TFrm_ImageMain = class(TForm)
@@ -45,7 +45,7 @@ var
 implementation
 
 uses
-  SmartCoreAI.Driver.OpenAI.Models;
+  SmartCoreAI.Driver.OpenAI.Models{$IF NOT DEFINED(ANDROID)}, FMX.DialogService.Sync{$ENDIF};
 
 {$R *.fmx}
 

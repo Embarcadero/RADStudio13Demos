@@ -12,8 +12,7 @@ uses
   Data.DB, FireDAC.Comp.DataSet, FireDAC.Comp.Client,
   SmartCoreAI.Comp.Connection, SmartCoreAI.Comp.JSON, SmartCoreAI.Types,
   SmartCoreAI.Driver.OpenAI, System.IniFiles, System.IOUtils,
-  Data.Bind.Components, Data.Bind.DBScope, Fmx.Bind.Editors, Data.Bind.Grid
-  {$IF NOT DEFINED(ANDROID)}, FMX.DialogService.Sync{$ENDIF};
+  Data.Bind.Components, Data.Bind.DBScope, Fmx.Bind.Editors, Data.Bind.Grid;
 
 type
   // Tiny helper that owns cached data and serves OnGetValue.
@@ -64,6 +63,11 @@ var
   Frm_JsonMain: TFrm_JsonMain;
 
 implementation
+
+{$IF NOT DEFINED(ANDROID)}
+uses
+  FMX.DialogService.Sync;
+{$ENDIF}
 
 {$R *.fmx}
 

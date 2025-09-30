@@ -7,7 +7,7 @@ uses
   FMX.Types, FMX.Controls, FMX.Forms, FMX.Graphics, FMX.Dialogs, SmartCoreAI.Types,
   SmartCoreAI.Driver.Gemini, SmartCoreAI.Comp.Connection, SmartCoreAI.Comp.Image,
   FMX.Memo.Types, FMX.StdCtrls, FMX.ScrollBox, FMX.Memo, FMX.Objects, FMX.Edit,
-  FMX.Controls.Presentation, System.IniFiles, System.IOUtils, FMX.DialogService.Sync,
+  FMX.Controls.Presentation, System.IniFiles, System.IOUtils,
   System.JSON;
 
 type
@@ -45,7 +45,7 @@ var
 implementation
 
 uses
-  SmartCoreAI.Driver.Gemini.Models;
+  SmartCoreAI.Driver.Gemini.Models{$IF NOT DEFINED(ANDROID)}, FMX.DialogService.Sync{$ENDIF};
 
 {$R *.fmx}
 
