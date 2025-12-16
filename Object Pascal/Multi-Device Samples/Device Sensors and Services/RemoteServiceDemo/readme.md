@@ -171,7 +171,18 @@ The **OnHandleMessage** procedure presents the message from the service in the s
 
 ### App Remote External 
 
-**AppRemoteExternal** is a Multi-Device application project that connects to **RemoteService** hosted in **AppRemoteHost**. 
+**AppRemoteExternal** is a Multi-Device application project that connects to **RemoteService** hosted in **AppRemoteHost**. The **AndroidManifest.template.xml** file must include the following declaration due to the privacy changes related to package visibility introduced in **Android 11**:
+
+```
+<queries>
+    ...
+    <package android:name="com.embarcadero.AppRemoteHost" />
+</queries>
+
+```
+
+Omitting this declaration prevents binding to the service, as the service is provided by a separate application, **AppRemoteHost**, and its package name must be visible to the **AppRemoteExternal** application.
+
 #### Bind Button 
 
 It stablishes the connection to **RemoteService** with `TRemoteServiceConnection.BindService('APackageName', AServiceName)`. If the service is not started, it also starts it. 
