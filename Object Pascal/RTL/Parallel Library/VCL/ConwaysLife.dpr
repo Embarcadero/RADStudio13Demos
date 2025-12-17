@@ -1,7 +1,7 @@
 program ConwaysLife;
 
 uses
-  Forms,
+  Vcl.Forms,
   LifeUnit in 'LifeUnit.pas' {LifeForm},
   LifeEngine in '..\Shared_Code\LifeEngine.pas';
 
