@@ -47,3 +47,9 @@ void __fastcall TForm1::DSServer1Disconnect(TDSConnectEventObject *DSConnectEven
 }
 //---------------------------------------------------------------------------
 
+void __fastcall TForm1::FormClose(TObject *Sender, TCloseAction &Action)
+{
+	DSServer1->Stop();
+}
+//---------------------------------------------------------------------------
+

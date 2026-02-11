@@ -34,6 +34,7 @@ __published:	// IDE-managed Components
 	void __fastcall DSServerClass1GetClass(TDSServerClass *DSServerClass, TPersistentClass &PersistentClass);
 	void __fastcall DSServer1Connect(TDSConnectEventObject *DSConnectEventObject);
 	void __fastcall DSServer1Disconnect(TDSConnectEventObject *DSConnectEventObject);
+	void __fastcall FormClose(TObject *Sender, TCloseAction &Action);
 
 
 private:	// User declarations
