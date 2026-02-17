@@ -50,6 +50,7 @@
 #include <System.Threading.hpp>
 #include <FMX.Graphics.hpp>
 #include <System.UITypes.hpp>
+#include <FMX.Memo.Types.hpp>
 //---------------------------------------------------------------------------
 class TfrmCtrlsDemo : public TForm
 {
