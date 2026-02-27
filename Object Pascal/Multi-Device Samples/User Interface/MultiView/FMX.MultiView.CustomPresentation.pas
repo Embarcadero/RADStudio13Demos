@@ -90,8 +90,11 @@ end;
 
 procedure TMultiViewAlertPresentation.DoFormReleased(const Sender: TObject; const M: TMessage);
 begin
-  if Sender = FDetailOverlay.Parent then
-    FDetailOverlay.Parent := nil;
+  if Sender <> FDetailOverlay.Parent then
+    Exit;
+
+  FDetailOverlay.Parent := nil;
+  FFrame.Parent := nil;
 end;
 
 procedure TMultiViewAlertPresentation.DoInstall;
@@ -134,7 +137,6 @@ end;
 procedure TMultiViewAlertPresentation.DoUninstall;
 begin
   MultiView.Visible := True;
-  FDetailOverlay.Parent := nil;
   inherited;
 end;
 

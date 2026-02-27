@@ -18,13 +18,13 @@ type
     Image1: TImage;
     AIConnection1: TAIConnection;
     AIOpenAIDriver1: TAIOpenAIDriver;
-    AIImageRequest1: TAIImageRequest;
+    ImgReq: TAIImageRequest;
     Memo1: TMemo;
     AniIndicator1: TAniIndicator;
     BtnCancel: TButton;
     procedure BtnGenerateClick(Sender: TObject);
-    procedure AIImageRequest1Error(Sender: TObject; const ErrorMessage: string);
-    procedure AIImageRequest1Success(Sender: TObject;
+    procedure ImgReqError(Sender: TObject; const ErrorMessage: string);
+    procedure ImgReqSuccess(Sender: TObject;
       const Images: TArray<SmartCoreAI.Types.IAIImageGenerationResult>;
       FullResponse: string);
     procedure FormResize(Sender: TObject);
@@ -61,13 +61,13 @@ begin
   AniIndicator1.Visible := AStatus;
 end;
 
-procedure TFrm_ImageMain.AIImageRequest1Error(Sender: TObject; const ErrorMessage: string);
+procedure TFrm_ImageMain.ImgReqError(Sender: TObject; const ErrorMessage: string);
 begin
   ActivityMonitor(False);
   Memo1.Lines.Add('Error: ' + ErrorMessage);
 end;
 
-procedure TFrm_ImageMain.AIImageRequest1Success(Sender: TObject;
+procedure TFrm_ImageMain.ImgReqSuccess(Sender: TObject;
   const Images: TArray<SmartCoreAI.Types.IAIImageGenerationResult>;
   FullResponse: string);
 var
@@ -85,12 +85,10 @@ begin
   if Assigned(Src) then
   begin
     try
-      // Some streams may not be seekable; copy to a temp memory stream if needed
       try
         Src.Position := 0;
         Image1.Bitmap.LoadFromStream(Src);
       except
-        // Fallback: copy to memory, then load
         Tmp := TMemoryStream.Create;
         try
           Src.Position := 0;
@@ -164,8 +162,8 @@ begin
       ReqOpenAI.Model := 'dall-e-3';
       // Set other parameters of ReqOpenAI here if needed.
 
-      AIImageRequest1.APIRequestObject := ReqOpenAI;
-      AIImageRequest1.Execute;
+      ImgReq.APIRequestObject := ReqOpenAI;
+      ImgReq.Execute;
 
     except on E: Exception do
       begin

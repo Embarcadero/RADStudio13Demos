@@ -52,7 +52,7 @@ type
     FLastRequestId: TGUID;
     procedure ActivityMonitor(const AStatus: Boolean);
     procedure PopulateGridFromMemTable(AGrid: TGrid; AMemTable: TFDMemTable);
-    function EnsureApiKeyFromIni(out AApiKey: string; const ASection: string = 'OpenAI'; const AIdent: string   = 'ApiKey'; const AIniPath: string = ''): Boolean;
+    function EnsureApiKeyFromIni(out AApiKey: string; const ASection: string = 'OpenAI'; const AIdent: string = 'ApiKey'; const AIniPath: string = ''): Boolean;
     procedure ClearGrid(const AGrid: TGrid);
     procedure ClearDatasetSchema(ADataset: TDataSet);
   public
@@ -156,13 +156,13 @@ begin
   AIOpenAIDriver1.CancelAll;
 end;
 
-
 procedure TFrm_JsonMain.FormCreate(Sender: TObject);
 begin
   FDMemTable1.FieldDefs.Add('Id', ftInteger);
   FDMemTable1.CreateDataSet;
   ActivityMonitor(False);
 end;
+
 procedure TFrm_JsonMain.FormResize(Sender: TObject);
 begin
   AniIndicator1.Position.X := (Self.ClientWidth  - AniIndicator1.Width) / 2;

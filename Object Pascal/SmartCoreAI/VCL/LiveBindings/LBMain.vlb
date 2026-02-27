@@ -10,6 +10,7 @@ Coordinates=261,1,82,33
 [AIChatBindSource1]
 Coordinates=10,10,111,87
 ExplicitSubNodes=
+Visible=True
 
 [Edit1]
 Coordinates=260,40,40,51

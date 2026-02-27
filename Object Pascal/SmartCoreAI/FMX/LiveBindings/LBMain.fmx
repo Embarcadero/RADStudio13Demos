@@ -1,0 +1,84 @@
+object Frm_LBMain: TFrm_LBMain
+  Left = 0
+  Top = 0
+  Caption = 'S'
+  ClientHeight = 480
+  ClientWidth = 640
+  FormFactor.Width = 320
+  FormFactor.Height = 480
+  FormFactor.Devices = [Desktop]
+  OnCreate = FormCreate
+  DesignerMasterStyle = 0
+  object Button1: TButton
+    Position.X = 32.000000000000000000
+    Position.Y = 48.000000000000000000
+    TabOrder = 5
+    Text = 'Try!'
+    OnClick = Button1Click
+  end
+  object Edit1: TEdit
+    Touch.InteractiveGestures = [LongTap, DoubleTap]
+    TabOrder = 6
+    Position.X = 136.000000000000000000
+    Position.Y = 48.000000000000000000
+    Size.Width = 217.000000000000000000
+    Size.Height = 22.000000000000000000
+    Size.PlatformDefault = False
+  end
+  object Memo1: TMemo
+    Touch.InteractiveGestures = [Pan, LongTap, DoubleTap]
+    DataDetectorTypes = []
+    Position.X = 136.000000000000000000
+    Position.Y = 78.000000000000000000
+    Size.Width = 217.000000000000000000
+    Size.Height = 155.000000000000000000
+    Size.PlatformDefault = False
+    TabOrder = 7
+    Viewport.Width = 217.000000000000000000
+    Viewport.Height = 155.000000000000000000
+  end
+  object AIChatBindSource1: TAIChatBindSource
+    AutoActivate = True
+    ScopeMappings = <>
+    Left = 96
+    Top = 280
+  end
+  object AIConnection1: TAIConnection
+    Driver = AIOpenAIDriver1
+    Left = 200
+    Top = 280
+  end
+  object AIOpenAIDriver1: TAIOpenAIDriver
+    Params.Strings = (
+      'Model=gpt-4o')
+    Left = 297
+    Top = 281
+  end
+  object AIChatRequest1: TAIChatRequest
+    Connection = AIConnection1
+    Left = 208
+    Top = 352
+  end
+  object BindingsList1: TBindingsList
+    Methods = <>
+    OutputConverters = <>
+    Left = 96
+    Top = 344
+    object LinkControlToField3: TLinkControlToField
+      Category = 'Quick Bindings'
+      DataSource = AIChatBindSource1
+      FieldName = 'Text'
+      Control = Edit1
+      Direction = linkDataToControl
+      Track = False
+    end
+    object LinkControlToField4: TLinkControlToField
+      Category = 'Quick Bindings'
+      DataSource = AIChatBindSource1
+      FieldName = 'Text'
+      Control = Memo1
+      Direction = linkDataToControl
+      Track = False
+    end
+  end
+end

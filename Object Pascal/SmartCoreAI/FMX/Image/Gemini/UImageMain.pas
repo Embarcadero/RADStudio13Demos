@@ -13,7 +13,7 @@ uses
 type
   TFrm_ImageMain = class(TForm)
     AIConnection1: TAIConnection;
-    AIImageRequest1: TAIImageRequest;
+    ImgReq: TAIImageRequest;
     AIGeminiDriver1: TAIGeminiDriver;
     Panel1: TPanel;
     Edit1: TEdit;
@@ -22,8 +22,8 @@ type
     Memo1: TMemo;
     AniIndicator1: TAniIndicator;
     BtnCancel: TButton;
-    procedure AIImageRequest1Error(Sender: TObject; const ErrorMessage: string);
-    procedure AIImageRequest1Success(Sender: TObject;
+    procedure ImgReqError(Sender: TObject; const ErrorMessage: string);
+    procedure ImgReqSuccess(Sender: TObject;
       const Images: TArray<SmartCoreAI.Types.IAIImageGenerationResult>;
       FullResponse: string);
     procedure BtnGenerateClick(Sender: TObject);
@@ -69,14 +69,14 @@ begin
   FLastRequestId := Tguid.Empty;
 end;
 
-procedure TFrm_ImageMain.AIImageRequest1Error(Sender: TObject; const ErrorMessage: string);
+procedure TFrm_ImageMain.ImgReqError(Sender: TObject; const ErrorMessage: string);
 begin
   AniIndicator1.Enabled := False;
   AniIndicator1.Visible := False;
   Memo1.Lines.Add('ERROR: ' + ErrorMessage);
 end;
 
-procedure TFrm_ImageMain.AIImageRequest1Success(Sender: TObject;
+procedure TFrm_ImageMain.ImgReqSuccess(Sender: TObject;
   const Images: TArray<SmartCoreAI.Types.IAIImageGenerationResult>;
   FullResponse: string);
 var
@@ -160,8 +160,8 @@ begin
     Memo1.Lines.Add('Requesting image...');
     LReqGemini := TAIGeminiGenerateImageRequest.Create;
     LReqGemini.Prompt := Edit1.Text;
-    AIImageRequest1.APIRequestObject := LReqGemini;
-    AIImageRequest1.Execute;
+    ImgReq.APIRequestObject := LReqGemini;
+    ImgReq.Execute;
   end;
 end;
 

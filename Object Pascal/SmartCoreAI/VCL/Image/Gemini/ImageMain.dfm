@@ -95,10 +95,10 @@ object FormImage: TFormImage
     Left = 128
     Top = 240
   end
-  object AIImageRequest1: TAIImageRequest
+  object ImgReq: TAIImageRequest
     Connection = AIConnection
-    OnSuccess = AIImageRequest1Success
-    OnError = AIImageRequest1Error
+    OnSuccess = ImgReqSuccess
+    OnError = ImgReqError
     Left = 128
     Top = 368
   end

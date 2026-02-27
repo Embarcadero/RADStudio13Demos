@@ -29,11 +29,11 @@ type
     AIConnection: TAIConnection;
     AIGeminiDriver: TAIGeminiDriver;
     ActivityIndicator1: TActivityIndicator;
-    AIImageRequest1: TAIImageRequest;
+    ImgReq: TAIImageRequest;
     BtnCancel: TButton;
     procedure BtnGenClick(Sender: TObject);
-    procedure AIImageRequest1Error(Sender: TObject; const ErrorMessage: string);
-    procedure AIImageRequest1Success(Sender: TObject; const Images: TArray<SmartCoreAI.Types.IAIImageGenerationResult>; FullResponse: string);
+    procedure ImgReqError(Sender: TObject; const ErrorMessage: string);
+    procedure ImgReqSuccess(Sender: TObject; const Images: TArray<SmartCoreAI.Types.IAIImageGenerationResult>; FullResponse: string);
     procedure FormResize(Sender: TObject);
     procedure BtnCancelClick(Sender: TObject);
     procedure AIGeminiDriverCancel(Sender: TObject; const RequestId: TGUID);
@@ -76,13 +76,13 @@ begin
   FLastRequestId := Tguid.Empty;
 end;
 
-procedure TFormImage.AIImageRequest1Error(Sender: TObject; const ErrorMessage: string);
+procedure TFormImage.ImgReqError(Sender: TObject; const ErrorMessage: string);
 begin
   ActivityMonitor(False);
   MemoLog.Lines.Add('ERROR: ' + ErrorMessage);
 end;
 
-procedure TFormImage.AIImageRequest1Success(Sender: TObject;
+procedure TFormImage.ImgReqSuccess(Sender: TObject;
   const Images: TArray<SmartCoreAI.Types.IAIImageGenerationResult>;
   FullResponse: string);
 begin
@@ -127,8 +127,8 @@ begin
     MemoLog.Lines.Add('Requesting image...');
     LReqGemini := TAIGeminiGenerateImageRequest.Create;
     LReqGemini.Prompt := EditPrompt.Text;
-    AIImageRequest1.APIRequestObject := LReqGemini;
-    FLastRequestId := AIImageRequest1.Execute;
+    ImgReq.APIRequestObject := LReqGemini;
+    FLastRequestId := ImgReq.Execute;
   end;
 end;
 

@@ -69,11 +69,14 @@ end;
 
 procedure TFrm_StreamMain.StreamReqSuccess(Sender: TObject; const AStream: TStream);
 var
-  S: TStringStream; OutFile: string;
+  S: TStringStream;
+  OutFile: string;
 begin
   S := TStringStream.Create('', TEncoding.UTF8);
   try
-    try S.CopyFrom(AStream, 0); MemoLog.Lines.Add('Success (text): ' + S.DataString);
+    try
+      S.CopyFrom(AStream, 0);
+      MemoLog.Lines.Add('Success (text): ' + S.DataString);
     except
       OutFile := IncludeTrailingPathDelimiter(GetEnvironmentVariable('TEMP')) + 'output.bin';
       AStream.Position := 0;

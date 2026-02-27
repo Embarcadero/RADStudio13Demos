@@ -66,8 +66,8 @@ object Frm_ImageMain: TFrm_ImageMain
     Size.Height = 178.000000000000000000
     Size.PlatformDefault = False
     TabOrder = 5
-    Viewport.Width = 832.000000000000000000
-    Viewport.Height = 178.000000000000000000
+    Viewport.Width = 828.000000000000000000
+    Viewport.Height = 174.000000000000000000
   end
   object AniIndicator1: TAniIndicator
     Position.X = 384.000000000000000000
@@ -85,10 +85,10 @@ object Frm_ImageMain: TFrm_ImageMain
     Left = 736
     Top = 312
   end
-  object AIImageRequest1: TAIImageRequest
+  object ImgReq: TAIImageRequest
     Connection = AIConnection1
-    OnSuccess = AIImageRequest1Success
-    OnError = AIImageRequest1Error
+    OnSuccess = ImgReqSuccess
+    OnError = ImgReqError
     Left = 736
     Top = 376
   end

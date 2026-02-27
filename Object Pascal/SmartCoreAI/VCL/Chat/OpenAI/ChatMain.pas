@@ -108,7 +108,7 @@ begin
     ActivityMonitor(True);
     MemoLog.Lines.Add('You: ' + EditPrompt.Text);
 
-    //Option A: usnig AIChatRequest component
+    //Option A: using AIChatRequest component
     //The response will be available in AIChatRequest1Response event.
     FLastRequestId := AIChatRequest1.Chat(EditPrompt.Text);
 

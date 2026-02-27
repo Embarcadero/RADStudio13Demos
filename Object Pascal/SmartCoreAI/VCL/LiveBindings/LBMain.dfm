@@ -75,6 +75,7 @@ object Frm_LBMain: TFrm_LBMain
       DataSource = AIChatBindSource1
       FieldName = 'Text'
       Control = Memo1
+      Direction = linkDataToControl
       Track = False
     end
   end

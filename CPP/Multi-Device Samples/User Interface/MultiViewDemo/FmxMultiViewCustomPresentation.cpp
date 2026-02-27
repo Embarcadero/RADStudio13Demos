@@ -16,9 +16,12 @@
 #pragma package(smart_init)
 // ---------------------------------------------------------------------------
 void __fastcall TMultiViewAlertPresentation::DoFormReleased(System::TObject* const Sender, System::Messaging::TMessageBase* const M) {
-	if (Sender == FDetailOverlay->Parent) {
-		FDetailOverlay->Parent = nullptr;
+	if (Sender != FDetailOverlay->Parent) {
+		return;
 	}
+
+	FDetailOverlay->Parent = nullptr;
+	FFrame->Parent = nullptr;
 }
 
 // ---------------------------------------------------------------------------
@@ -40,7 +43,6 @@ void __fastcall TMultiViewAlertPresentation::DoInstall(void) {
 // ---------------------------------------------------------------------------
 void __fastcall TMultiViewAlertPresentation::DoUninstall(void) {
 	MultiView->Visible = true;
-	FDetailOverlay->Parent = nullptr;
 }
 
 // ---------------------------------------------------------------------------

@@ -16,8 +16,8 @@ interface
 uses
   Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
   Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.StdCtrls, Vcl.ExtCtrls, SmartCoreAI.Comp.Connection,
-  SmartCoreAI.Comp.Chat, SmartCoreAI.Types, SmartCoreAI.Consts,
-  Vcl.WinXCtrls, SmartCoreAI.Driver.Claude;
+  SmartCoreAI.Comp.Chat, SmartCoreAI.Driver.Gemini, SmartCoreAI.Types, SmartCoreAI.Consts,
+  Vcl.WinXCtrls;
 
 type
   TFrm_ChatMain = class(TForm)
@@ -26,22 +26,23 @@ type
     BtnSend: TButton;
     MemoLog: TMemo;
     AIConnection: TAIConnection;
+    AIGeminiDriver1: TAIGeminiDriver;
     AIChatRequest1: TAIChatRequest;
     BtnCancel: TButton;
     ActivityIndicator1: TActivityIndicator;
-    AIClaudeDriver1: TAIClaudeDriver;
     procedure AIChatRequest1Response(Sender: TObject; const Text: string);
     procedure BtnSendClick(Sender: TObject);
     procedure AIChatRequest1Error(Sender: TObject; const ErrorMessage: string);
     procedure BtnCancelClick(Sender: TObject);
     procedure FormResize(Sender: TObject);
     procedure FormCreate(Sender: TObject);
-    procedure AIClaudeDriver1Cancel(Sender: TObject; const RequestId: TGUID);
-    procedure AIClaudeDriver1ChatSuccess(Sender: TObject; const ResponseText, FullJsonResponse: string);
+    procedure AIGeminiDriver1Cancel(Sender: TObject; const RequestId: TGUID);
+    procedure AIGeminiDriver1ChatSuccess(Sender: TObject; const ResponseText,
+      FullJsonResponse: string);
   private
     FLastRequestId: TGUID;
     procedure ActivityMonitor(const AStatus: Boolean);
-    function EnsureApiKeyFromIni(out AApiKey: string; const ASection: string = 'Claude'; const AIdent: string   = 'ApiKey'; const AIniPath: string = ''): Boolean;
+    function EnsureApiKeyFromIni(out AApiKey: string; const ASection: string = 'Gemini'; const AIdent: string   = 'ApiKey'; const AIniPath: string = ''): Boolean;
   end;
 
 var
@@ -50,16 +51,17 @@ var
 implementation
 
 uses
-  System.IniFiles, System.IOUtils, SmartCoreAI.Driver.Claude.Models;
+  System.IniFiles, System.IOUtils, SmartCoreAI.Driver.Gemini.Models;
 
 {$R *.dfm}
 
 // SmartCoreAI Delphi Design-Time Demo
-// Components: TAIConnection, TAIClaudeDriver1, TAIChatRequest
+// Components: TAIConnection, TAIGeminiDriver, TAIChatRequest
 // Uses SmartCoreAI.Consts for default endpoints and errors.
 // Set parameters via Object Inspecor.
 // The application will request the API key on its first run and save it to an INI file in the same directory as the executable.
 // Each method call generates a request id (GUID) that could be used later for request cancellation.
+
 
 procedure TFrm_ChatMain.ActivityMonitor(const AStatus: Boolean);
 begin
@@ -79,15 +81,15 @@ begin
   MemoLog.Lines.Add('AI: ' + Text);
 end;
 
-procedure TFrm_ChatMain.AIClaudeDriver1Cancel(Sender: TObject;
+procedure TFrm_ChatMain.AIGeminiDriver1Cancel(Sender: TObject;
   const RequestId: TGUID);
 begin
   ActivityMonitor(False);
   MemoLog.Lines.Add('Cancelled, RequestId:' + RequestId.ToString);
-  FLastRequestId := Tguid.Empty;
+  FLastRequestId := TGuid.Empty;
 end;
 
-procedure TFrm_ChatMain.AIClaudeDriver1ChatSuccess(Sender: TObject;
+procedure TFrm_ChatMain.AIGeminiDriver1ChatSuccess(Sender: TObject;
   const ResponseText, FullJsonResponse: string);
 begin
   ActivityMonitor(False);
@@ -100,32 +102,21 @@ var
 begin
   if EnsureApiKeyFromIni(LAPIKey) then
   begin
-    TAIClaudeParams(AIClaudeDriver1.Params).APIKey := LAPIKey;
+    TAIGeminiParams(AIGeminiDriver1.Params).APIKey := LAPIKey;
     if EditPrompt.Text = '' then
       Exit;
 
     ActivityMonitor(True);
     MemoLog.Lines.Add('You: ' + EditPrompt.Text);
 
-    // Option A: using AIChatRequest component
-    // The response will be available in AIChatRequest1Response event.
+    //Option A: using AIChatRequest component
+    //The response will be available in AIChatRequest1Response event.
     FLastRequestId := AIChatRequest1.Chat(EditPrompt.Text);
 
-    //Option B-1: using the ChatEx method of the Driver.
     {
-    //The response will be available in AIClaudeDriver1ChatSuccess event.
-    var LReq: TClaudeMessageRequest;
-    LReq := TClaudeMessageRequest.Create; // Driver owns it.
-    LReq.Model := TAIClaudeParams(AIClaudeDriver1.Params).Model;
-    LReq.MaxTokens := TAIClaudeParams(AIClaudeDriver1.Params).MaxToken;
-    LReq.Messages.Add(TClaudeMessage.Create('user', EditPrompt.Text));
-    FLastRequestId := AIClaudeDriver1.ChatEx(LReq);
-    }
-
-    //Option B-2: SimpleChat
-    {
-    //The response will be available in AIClaudeDriver1ChatSuccess event.
-    AIClaudeDriver1.SimpleChat(EditPrompt.Text);
+    //Option B: SimpleChat
+    //The response will be available in AIGeminiDriverChatSuccess event.
+    AIGeminiDriver1.SimpleChat(EditPrompt.Text);
     }
   end;
 end;
@@ -133,7 +124,7 @@ end;
 procedure TFrm_ChatMain.BtnCancelClick(Sender: TObject);
 begin
   if FLastRequestId <> TGUID.Empty then
-    AIClaudeDriver1.Cancel(FLastRequestId); // or AIClaudeDriver1.CancelAll;
+    AIGeminiDriver1.Cancel(FLastRequestId); // or AIGeminiDriver.CancelAll;
 end;
 
 procedure TFrm_ChatMain.FormCreate(Sender: TObject);
@@ -153,7 +144,7 @@ var
   Ini: TIniFile;
   Tmp: string;
 begin
-  AApiKey := TAIClaudeParams(AIClaudeDriver1.Params).APIKey;
+  AApiKey := TAIGeminiParams(AIGeminiDriver1.Params).APIKey;
   if not AApiKey.IsEmpty then
     Exit(True);
 
@@ -181,4 +172,5 @@ begin
     Ini.Free;
   end;
 end;
+
 end.
