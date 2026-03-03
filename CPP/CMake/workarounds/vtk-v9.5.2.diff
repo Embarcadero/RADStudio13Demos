@@ -1,0 +1,150 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index a3e8aa7bf9..2d24e32460 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -74,6 +74,16 @@ add_library(VTK::vtkbuild ALIAS vtkbuild)
+ add_library(vtkplatform INTERFACE)
+ add_library(VTK::vtkplatform ALIAS vtkplatform)
+ 
++if (WIN32)
++  set(VTK_WINRT_INCLUDE_DIR "C:/Program Files (x86)/Windows Kits/10/Include/10.0.26100.0/winrt" CACHE PATH "WinRT headers")
++
++  if (NOT EXISTS "${VTK_WINRT_INCLUDE_DIR}")
++    message(FATAL_ERROR "WinRT headers not found at ${VTK_WINRT_INCLUDE_DIR}")
++  endif ()
++
++  target_include_directories(vtkbuild SYSTEM INTERFACE "${VTK_WINRT_INCLUDE_DIR}")
++endif ()
++
+ # Some flags are really bad for caching. Replace them with better variants.
+ if (vtk_replace_uncacheable_flags)
+   get_property(is_multiconfig GLOBAL PROPERTY GENERATOR_IS_MULTI_CONFIG)
+diff --git a/Common/Core/vtkAOSDataArrayTemplate.h b/Common/Core/vtkAOSDataArrayTemplate.h
+index 1d39829cc0..2333086418 100644
+--- a/Common/Core/vtkAOSDataArrayTemplate.h
++++ b/Common/Core/vtkAOSDataArrayTemplate.h
+@@ -98,13 +98,7 @@ public:
+   /**
+    * Copy the tuple at @a tupleIdx into @a tuple.
+    */
+-  void GetTypedTuple(vtkIdType tupleIdx, ValueType* tuple) const
+-    VTK_EXPECTS(0 <= tupleIdx && tupleIdx < GetNumberOfTuples())
+-  {
+-    const vtkIdType valueIdx = tupleIdx * this->NumberOfComponents;
+-    std::copy(this->Buffer->GetBuffer() + valueIdx,
+-      this->Buffer->GetBuffer() + valueIdx + this->NumberOfComponents, tuple);
+-  }
++  void GetTypedTuple(vtkIdType tupleIdx, ValueType* tuple) const;
+   ///@}
+ 
+   ///@{
+@@ -341,6 +335,15 @@ private:
+   friend class vtkGenericDataArray<SelfType, ValueType, ArrayTypeTag::value>;
+ };
+ 
++
++template <class ValueTypeT>
++void vtkAOSDataArrayTemplate<ValueTypeT>::GetTypedTuple(vtkIdType tupleIdx, ValueType* tuple) const
++{
++  const vtkIdType valueIdx = tupleIdx * this->NumberOfComponents;
++  std::copy(this->Buffer->GetBuffer() + valueIdx,
++    this->Buffer->GetBuffer() + valueIdx + this->NumberOfComponents, tuple);
++}
++
+ // Declare vtkArrayDownCast implementations for AoS containers:
+ vtkArrayDownCast_TemplateFastCastMacro(vtkAOSDataArrayTemplate);
+ 
+diff --git a/Common/Core/vtkSOADataArrayTemplate.h b/Common/Core/vtkSOADataArrayTemplate.h
+index 2e0b9c9004..c24bced072 100644
+--- a/Common/Core/vtkSOADataArrayTemplate.h
++++ b/Common/Core/vtkSOADataArrayTemplate.h
+@@ -81,22 +81,7 @@ public:
+   /**
+    * Copy the tuple at @a tupleIdx into @a tuple.
+    */
+-  void GetTypedTuple(vtkIdType tupleIdx, ValueType* tuple) const
+-  {
+-    if (this->StorageType == StorageTypeEnum::SOA)
+-    {
+-      for (size_t cc = 0; cc < this->Data.size(); cc++)
+-      {
+-        tuple[cc] = this->Data[cc]->GetBuffer()[tupleIdx];
+-      }
+-    }
+-    else
+-    {
+-      ValueType* buffer = this->AoSData->GetBuffer();
+-      std::copy(buffer + tupleIdx * this->GetNumberOfComponents(),
+-        buffer + (tupleIdx + 1) * this->GetNumberOfComponents(), tuple);
+-    }
+-  }
++  void GetTypedTuple(vtkIdType tupleIdx, ValueType* tuple) const;
+ 
+   /**
+    * Set this array's tuple at @a tupleIdx to the values in @a tuple.
+@@ -273,6 +258,25 @@ private:
+   friend class vtkGenericDataArray<SelfType, ValueType, ArrayTypeTag::value>;
+ };
+ 
++template <class ValueTypeT>
++void
++vtkSOADataArrayTemplate<ValueTypeT>::GetTypedTuple(vtkIdType tupleIdx, ValueType* tuple) const
++{
++  if (this->StorageType == StorageTypeEnum::SOA)
++  {
++    for (size_t cc = 0; cc < this->Data.size(); cc++)
++    {
++      tuple[cc] = this->Data[cc]->GetBuffer()[tupleIdx];
++    }
++  }
++  else
++  {
++    ValueType* buffer = this->AoSData->GetBuffer();
++    std::copy(buffer + tupleIdx * this->GetNumberOfComponents(),
++      buffer + (tupleIdx + 1) * this->GetNumberOfComponents(), tuple);
++  }
++}
++
+ // Declare vtkArrayDownCast implementations for SoA containers:
+ vtkArrayDownCast_TemplateFastCastMacro(vtkSOADataArrayTemplate);
+ 
+diff --git a/Rendering/OpenGL2/vtkWin32OpenGLDXRenderWindow.cxx b/Rendering/OpenGL2/vtkWin32OpenGLDXRenderWindow.cxx
+index c329be77c8..7a6ddd71b0 100644
+--- a/Rendering/OpenGL2/vtkWin32OpenGLDXRenderWindow.cxx
++++ b/Rendering/OpenGL2/vtkWin32OpenGLDXRenderWindow.cxx
+@@ -9,6 +9,8 @@
+ 
+ #include <d3d11.h> // For D3D11 interface
+ #include <dxgi.h>
++
++#define _MSC_VER 1600
+ #include <wrl/client.h> // For Microsoft::WRL::ComPtr
+ 
+ #include <array>
+diff --git a/ThirdParty/hdf5/vtkhdf5/src/H5private.h b/ThirdParty/hdf5/vtkhdf5/src/H5private.h
+index 41b506bf6c..b2bfda3ce3 100644
+--- a/ThirdParty/hdf5/vtkhdf5/src/H5private.h
++++ b/ThirdParty/hdf5/vtkhdf5/src/H5private.h
+@@ -1566,6 +1566,9 @@ H5_DLL H5_ATTR_CONST int Nflock(int fd, int operation);
+ 
+ #ifndef HDvasprintf
+ #ifdef H5_HAVE_VASPRINTF
++#ifdef __MINGW32__
++int vasprintf(char **bufp, const char *fmt, va_list _ap);
++#endif
+ #define HDvasprintf(RET, FMT, A) vasprintf(RET, FMT, A)
+ #else
+ H5_DLL int HDvasprintf(char **bufp, const char *fmt, va_list _ap);
+diff --git a/ThirdParty/tiff/vtktiff/libtiff/tiff.h b/ThirdParty/tiff/vtktiff/libtiff/tiff.h
+index 81de08ef4a..9de1446fa7 100644
+--- a/ThirdParty/tiff/vtktiff/libtiff/tiff.h
++++ b/ThirdParty/tiff/vtktiff/libtiff/tiff.h
+@@ -28,7 +28,7 @@
+ #include "vtk_tiff_mangle.h"
+ #include "tiffconf.h"
+ 
+-#ifdef _WIN32
++#if defined(_WIN32) && !defined(__MINGW32__)
+ #if TIFF_SHARED_LIBS
+ #ifdef tiff_EXPORTS
+ #define vtktiff_EXPORT __declspec(dllexport)

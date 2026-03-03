@@ -73,7 +73,7 @@ end;
 
 procedure TFrm_ImageMain.FormCloseQuery(Sender: TObject; var CanClose: Boolean);
 begin
-  CanClose := not AIOpenAIDriver.IsRuning;
+  CanClose := not AIOpenAIDriver.IsRunning;
   if not CanClose then
   begin
     ActivityMonitor(True);

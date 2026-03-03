@@ -10,11 +10,11 @@ rem ----------------------------------------------------------------------------
 rem ----------------------------------------------------------------------------
 
 set repo_uri=https://github.com/Kitware/VTK.git
-set repo_version=v9.3.1
+set repo_version=23daad7b687725f22b1b5e24e3ac5f1042658c92
 set repo_local=%pwd%\vtk
 set output_dir=%pwd%\build-vtk
 set setup_dir=%pwd%\install
-set patch_file=%pwd%\workarounds\vtk-v9.3.1.diff
+set patch_file=%pwd%\workarounds\vtk-v9.5.2.diff
 
 rem ----------------------------------------------------------------------------
 rem ----------------------------------------------------------------------------
@@ -22,7 +22,7 @@ rem ----------------------------------------------------------------------------
 if exist %repo_local%\ goto :CLONE_DONE
 mkdir %repo_local% || goto :END
 
-git clone --branch %repo_version% --single-branch %repo_uri% %repo_local% || goto :CLONE_ERROR
+git clone --revision %repo_version% --single-branch %repo_uri% %repo_local% || goto :CLONE_ERROR
 
 echo Applying compatibility patch, please see %patch_file% for details.
 
