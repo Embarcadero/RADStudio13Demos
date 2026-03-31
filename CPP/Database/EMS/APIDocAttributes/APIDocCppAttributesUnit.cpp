@@ -48,17 +48,10 @@ void TSampleAttributesCppResource1::GetItem(TEndpointContext* AContext, TEndpoin
 	EmployeeTable->SQL->Add("SELECT *  FROM EMPLOYEE WHERE FIRST_NAME ='" + item + "'");
 	EmployeeTable->Open();
 	if (EmployeeTable->RecordCount <= 0) {
-		TJSONObjectBuilder* LJSONObjectBuilder = new TJSONObjectBuilder((TJsonWriter *)(AResponse->Body->JSONWriter));
-		try
-		{
-			AResponse->StatusCode = 404;
-			LJSONObjectBuilder->BeginObject()->Add("errormessage", "Error")
+		std::unique_ptr<TJSONObjectBuilder> LJSONObjectBuilder(new TJSONObjectBuilder((TJsonWriter *)(AResponse->Body->JSONWriter)));
+		AResponse->StatusCode = 404;
+		LJSONObjectBuilder->BeginObject()->Add("errormessage", "Error")
 				->Add("description", "Not Found");
-		}
-		__finally
-		{
-			delete LJSONObjectBuilder;
-		}
 	}else{
 		TMemoryStream* MemStream = new TMemoryStream;
 		try
@@ -77,42 +70,35 @@ void TSampleAttributesCppResource1::Post(TEndpointContext* AContext, TEndpointRe
 {
 	TJsonTextReader* LReader = ARequest->Body->JSONReader;
 	LReader->Read();
-	TJSONObjectBuilder* LJSONObjectBuilder = new TJSONObjectBuilder((TJsonWriter *)(AResponse->Body->JSONWriter));
-	try
-	{
-		LJSONObjectBuilder->BeginObject()->BeginArray("PostedData");
-		while(LReader->Read() && LReader->TokenType == TJsonToken::PropertyName){
-			String LPropertyName = LReader->Value.AsString();
-			LReader->Read();
-			if ((LReader->TokenType != TJsonToken::String) && (LReader->TokenType != TJsonToken::Integer)) {
-				throw Exception("Unexpected Token, expected string");
-			}
-			if (LPropertyName == "EMP_NO") {
-				LJSONObjectBuilder->ParentArray->Add(IntToStr(LReader->Value.AsInteger()));
-			}else if (LPropertyName == "FIRST_NAME") {
-				LJSONObjectBuilder->ParentArray->Add(LReader->Value.AsString());
-			}else if (LPropertyName == "LAST_NAME") {
-				LJSONObjectBuilder->ParentArray->Add(LReader->Value.AsString());
-			}else if (LPropertyName == "PHONE_EXT") {
-				LJSONObjectBuilder->ParentArray->Add(LReader->Value.AsString());
-			}else if (LPropertyName == "HIRE_DATE") {
-				LJSONObjectBuilder->ParentArray->Add(LReader->Value.AsString());
-			}else if (LPropertyName == "DEPT_NO") {
-				LJSONObjectBuilder->ParentArray->Add(LReader->Value.AsString());
-			}else if (LPropertyName == "JOB_CODE") {
-				LJSONObjectBuilder->ParentArray->Add(LReader->Value.AsString());
-			}else if (LPropertyName == "JOB_GRADE") {
-				LJSONObjectBuilder->ParentArray->Add(IntToStr(LReader->Value.AsInteger()));
-			}else if (LPropertyName == "JOB_COUNTRY") {
-				LJSONObjectBuilder->ParentArray->Add(LReader->Value.AsString());
-			}else if (LPropertyName == "SALARY") {
-				LJSONObjectBuilder->ParentArray->Add(IntToStr(LReader->Value.AsInteger()));
-			}
+	std::unique_ptr<TJSONObjectBuilder> LJSONObjectBuilder(new TJSONObjectBuilder((TJsonWriter *)(AResponse->Body->JSONWriter)));
+	LJSONObjectBuilder->BeginObject()->BeginArray("PostedData");
+	while(LReader->Read() && LReader->TokenType == TJsonToken::PropertyName){
+		String LPropertyName = LReader->Value.AsString();
+		LReader->Read();
+		if ((LReader->TokenType != TJsonToken::String) && (LReader->TokenType != TJsonToken::Integer)) {
+			throw Exception("Unexpected Token, expected string");
 		}
-	}
-	__finally
-	{
-		delete LJSONObjectBuilder;
+		if (LPropertyName == "EMP_NO") {
+			LJSONObjectBuilder->ParentArray->Add(IntToStr(LReader->Value.AsInteger()));
+		}else if (LPropertyName == "FIRST_NAME") {
+			LJSONObjectBuilder->ParentArray->Add(LReader->Value.AsString());
+		}else if (LPropertyName == "LAST_NAME") {
+			LJSONObjectBuilder->ParentArray->Add(LReader->Value.AsString());
+		}else if (LPropertyName == "PHONE_EXT") {
+			LJSONObjectBuilder->ParentArray->Add(LReader->Value.AsString());
+		}else if (LPropertyName == "HIRE_DATE") {
+			LJSONObjectBuilder->ParentArray->Add(LReader->Value.AsString());
+		}else if (LPropertyName == "DEPT_NO") {
+			LJSONObjectBuilder->ParentArray->Add(LReader->Value.AsString());
+		}else if (LPropertyName == "JOB_CODE") {
+			LJSONObjectBuilder->ParentArray->Add(LReader->Value.AsString());
+		}else if (LPropertyName == "JOB_GRADE") {
+			LJSONObjectBuilder->ParentArray->Add(IntToStr(LReader->Value.AsInteger()));
+		}else if (LPropertyName == "JOB_COUNTRY") {
+			LJSONObjectBuilder->ParentArray->Add(LReader->Value.AsString());
+		}else if (LPropertyName == "SALARY") {
+			LJSONObjectBuilder->ParentArray->Add(IntToStr(LReader->Value.AsInteger()));
+		}
 	}
 }
 
@@ -122,43 +108,36 @@ void TSampleAttributesCppResource1::PutItem(TEndpointContext* AContext, TEndpoin
 	item = ARequest->Params->Values["item"];
 	TJsonTextReader* LReader = ARequest->Body->JSONReader;
 	LReader->Read();
-	TJSONObjectBuilder* LJSONObjectBuilder = new TJSONObjectBuilder((TJsonWriter *)(AResponse->Body->JSONWriter));
-	try
-	{
-		LJSONObjectBuilder->BeginObject()->Add("PathItem", item)
-			->BeginArray("PostedData");
-		while(LReader->Read() && LReader->TokenType == TJsonToken::PropertyName){
-			String LPropertyName = LReader->Value.AsString();
-			LReader->Read();
-			if ((LReader->TokenType != TJsonToken::String) && (LReader->TokenType != TJsonToken::Integer)) {
-				throw Exception("Unexpected Token, expected string");
-			}
-			if (LPropertyName == "EMP_NO") {
-				LJSONObjectBuilder->ParentArray->Add(IntToStr(LReader->Value.AsInteger()));
-			}else if (LPropertyName == "FIRST_NAME") {
-				LJSONObjectBuilder->ParentArray->Add(LReader->Value.AsString());
-			}else if (LPropertyName == "LAST_NAME") {
-				LJSONObjectBuilder->ParentArray->Add(LReader->Value.AsString());
-			}else if (LPropertyName == "PHONE_EXT") {
-				LJSONObjectBuilder->ParentArray->Add(LReader->Value.AsString());
-			}else if (LPropertyName == "HIRE_DATE") {
-				LJSONObjectBuilder->ParentArray->Add(LReader->Value.AsString());
-			}else if (LPropertyName == "DEPT_NO") {
-				LJSONObjectBuilder->ParentArray->Add(LReader->Value.AsString());
-			}else if (LPropertyName == "JOB_CODE") {
-				LJSONObjectBuilder->ParentArray->Add(LReader->Value.AsString());
-			}else if (LPropertyName == "JOB_GRADE") {
-				LJSONObjectBuilder->ParentArray->Add(IntToStr(LReader->Value.AsInteger()));
-			}else if (LPropertyName == "JOB_COUNTRY") {
-				LJSONObjectBuilder->ParentArray->Add(LReader->Value.AsString());
-			}else if (LPropertyName == "SALARY") {
-				LJSONObjectBuilder->ParentArray->Add(IntToStr(LReader->Value.AsInteger()));
-			}
+	std::unique_ptr<TJSONObjectBuilder> LJSONObjectBuilder(new TJSONObjectBuilder((TJsonWriter *)(AResponse->Body->JSONWriter)));
+	LJSONObjectBuilder->BeginObject()->Add("PathItem", item)
+		->BeginArray("PostedData");
+	while(LReader->Read() && LReader->TokenType == TJsonToken::PropertyName){
+		String LPropertyName = LReader->Value.AsString();
+		LReader->Read();
+		if ((LReader->TokenType != TJsonToken::String) && (LReader->TokenType != TJsonToken::Integer)) {
+			throw Exception("Unexpected Token, expected string");
 		}
-	}
-	__finally
-	{
-		delete LJSONObjectBuilder;
+		if (LPropertyName == "EMP_NO") {
+			LJSONObjectBuilder->ParentArray->Add(IntToStr(LReader->Value.AsInteger()));
+		}else if (LPropertyName == "FIRST_NAME") {
+			LJSONObjectBuilder->ParentArray->Add(LReader->Value.AsString());
+		}else if (LPropertyName == "LAST_NAME") {
+			LJSONObjectBuilder->ParentArray->Add(LReader->Value.AsString());
+		}else if (LPropertyName == "PHONE_EXT") {
+			LJSONObjectBuilder->ParentArray->Add(LReader->Value.AsString());
+		}else if (LPropertyName == "HIRE_DATE") {
+			LJSONObjectBuilder->ParentArray->Add(LReader->Value.AsString());
+		}else if (LPropertyName == "DEPT_NO") {
+			LJSONObjectBuilder->ParentArray->Add(LReader->Value.AsString());
+		}else if (LPropertyName == "JOB_CODE") {
+			LJSONObjectBuilder->ParentArray->Add(LReader->Value.AsString());
+		}else if (LPropertyName == "JOB_GRADE") {
+			LJSONObjectBuilder->ParentArray->Add(IntToStr(LReader->Value.AsInteger()));
+		}else if (LPropertyName == "JOB_COUNTRY") {
+			LJSONObjectBuilder->ParentArray->Add(LReader->Value.AsString());
+		}else if (LPropertyName == "SALARY") {
+			LJSONObjectBuilder->ParentArray->Add(IntToStr(LReader->Value.AsInteger()));
+		}
 	}
 }
 

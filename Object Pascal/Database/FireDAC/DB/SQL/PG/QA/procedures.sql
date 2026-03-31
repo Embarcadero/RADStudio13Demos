@@ -135,6 +135,16 @@ END;
 $$ LANGUAGE plpgsql;
 /
 
+DROP PROCEDURE FDQA_ref_cursors4 (refcursor);
+
+CREATE PROCEDURE FDQA_ref_cursors4 (t1 refcursor)
+AS $$
+BEGIN
+  OPEN $1 FOR SELECT * FROM "Customers" ORDER BY CustomerID;
+END;
+$$ LANGUAGE plpgsql;
+/
+
 DROP FUNCTION FDQA_TestBinding(in p1 INTEGER, in p2 VARCHAR(10),
   out p3 INTEGER, out p4 VARCHAR(10));
 
