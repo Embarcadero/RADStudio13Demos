@@ -76,7 +76,7 @@ begin
   {$IF DEFINED(MSWINDOWS) AND DEFINED(DEBUG)}
   FConfig := TInterBaseConfig.Create(TInterBaseConnectionType.Server, '', 'c:\data\devdatabase.ib');
   {$ELSE}
-  FSetup := TInterBaseConfig.Create(TInterBaseConnectionType.Server, '','');
+  FConfig := TInterBaseConfig.Create(TInterBaseConnectionType.Server, '', '');
   {$ENDIF}
   // Create main and admin data modules
   MainDM := TMainDM.Create(Self);
