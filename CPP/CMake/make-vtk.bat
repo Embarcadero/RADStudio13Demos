@@ -22,7 +22,10 @@ rem ----------------------------------------------------------------------------
 if exist %repo_local%\ goto :CLONE_DONE
 mkdir %repo_local% || goto :END
 
-git clone --revision %repo_version% --single-branch %repo_uri% %repo_local% || goto :CLONE_ERROR
+git -C %repo_local% init || goto :CLONE_ERROR
+git -C %repo_local% remote add origin %repo_uri% || goto :CLONE_ERROR
+git -C %repo_local% fetch --depth=1 origin %repo_version% || goto :CLONE_ERROR
+git -C %repo_local% checkout FETCH_HEAD || goto :CLONE_ERROR
 
 echo Applying compatibility patch, please see %patch_file% for details.
 
