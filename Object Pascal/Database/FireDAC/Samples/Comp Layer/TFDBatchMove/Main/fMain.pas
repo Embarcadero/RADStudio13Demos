@@ -94,7 +94,7 @@ procedure TfrmMain.btnASCToTabMoveClick(Sender: TObject);
 begin
   CloseQueries;
 
-  // Create text reader and set FDBatchMode as owner. Then
+  // Create text reader and set FDBatchMove as owner. Then
   // FDBatchMove will automatically manage the reader instance.
   with TFDBatchMoveTextReader.Create(FDBatchMove) do begin
     // Set text data file name
@@ -103,7 +103,7 @@ begin
     DataDef.Separator := ';';
     DataDef.WithFieldNames := True;
   end;
-  // Create dataset writer and set FDBatchMode as owner. Then
+  // Create dataset writer and set FDBatchMove as owner. Then
   // FDBatchMove will automatically manage the writer instance.
   with TFDBatchMoveDataSetWriter.Create(FDBatchMove) do begin
     // Set destination dataset
