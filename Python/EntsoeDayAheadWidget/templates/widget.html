@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Day-ahead elektriciteitsprijzen – {{ zone_label }}</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js"></script>
+<style>
+  :root {
+    --fg: #1f2937;
+    --muted: #6b7280;
+    --bg: #ffffff;
+  }
+  body {
+    margin: 0;
+    padding: 12px;
+    background: var(--bg);
+    color: var(--fg);
+    font-family: -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+  }
+  .header {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    flex-wrap: wrap;
+    gap: 4px 12px;
+    margin-bottom: 8px;
+  }
+  h1 { font-size: 1rem; margin: 0; }
+  .sub { font-size: 0.8rem; color: var(--muted); }
+  .stats {
+    display: flex;
+    gap: 16px;
+    font-size: 0.8rem;
+    color: var(--muted);
+    margin-bottom: 8px;
+    flex-wrap: wrap;
+  }
+  .stats b { color: var(--fg); }
+  .chart-wrap { position: relative; height: 300px; }
+  #message { font-size: 0.9rem; color: #b91c1c; padding: 16px 0; }
+  .footer { font-size: 0.7rem; color: var(--muted); margin-top: 8px; }
+</style>
+</head>
+<body>
+  <div class="header">
+    <h1>Stroomprijzen vandaag – {{ zone_label }}</h1>
+    <span class="sub" id="dateLabel"></span>
+  </div>
+  <div class="stats" id="stats" hidden>
+    <span>Min: <b id="statMin"></b></span>
+    <span>Gemiddeld: <b id="statAvg"></b></span>
+    <span>Max: <b id="statMax"></b></span>
+  </div>
+  <div class="chart-wrap"><canvas id="priceChart"></canvas></div>
+  <div id="message" hidden></div>
+  <div class="footer">Bron: ENTSO-E Transparency Platform (day-ahead veiling), prijzen in ct/kWh excl. belastingen en inkoopkosten.</div>
+
+<script>
+(async function () {
+  const params = new URLSearchParams(location.search);
+  const zone = params.get("zone") || "{{ zone }}";
+  const date = params.get("date");
+
+  const apiUrl = new URL("api/prices", location.href.replace(/widget.*$/, ""));
+  apiUrl.searchParams.set("zone", zone);
+  if (date) apiUrl.searchParams.set("date", date);
+
+  const messageEl = document.getElementById("message");
+  let data;
+  try {
+    const response = await fetch(apiUrl);
+    data = await response.json();
+    if (!response.ok) throw new Error(data.error || response.statusText);
+  } catch (err) {
+    messageEl.textContent = "Prijzen konden niet worden geladen: " + err.message;
+    messageEl.hidden = false;
+    return;
+  }
+
+  document.getElementById("dateLabel").textContent =
+    new Date(data.date + "T00:00:00").toLocaleDateString("nl-NL",
+      { weekday: "long", day: "numeric", month: "long", year: "numeric" });
+
+  const prices = data.prices.map(p => p.price_ct_kwh);
+  const labels = data.prices.map(p => p.hour);
+  const min = Math.min(...prices), max = Math.max(...prices);
+  const avg = prices.reduce((a, b) => a + b, 0) / prices.length;
+  const fmt = v => v.toFixed(1).replace(".", ",") + " ct/kWh";
+  document.getElementById("statMin").textContent = fmt(min);
+  document.getElementById("statAvg").textContent = fmt(avg);
+  document.getElementById("statMax").textContent = fmt(max);
+  document.getElementById("stats").hidden = false;
+
+  // Kleur per staaf: groen (goedkoop) -> oranje -> rood (duur), relatief
+  // t.o.v. de spreiding van vandaag. Huidig uur krijgt een blauwe rand.
+  const nowHour = new Date().toLocaleString("sv-SE",
+    { timeZone: "Europe/Amsterdam", hour12: false }).slice(0, 13);
+  const colors = data.prices.map(p => {
+    const t = max === min ? 0.5 : (p.price_ct_kwh - min) / (max - min);
+    if (t < 0.33) return "rgba(34,197,94,0.75)";
+    if (t < 0.66) return "rgba(245,158,11,0.75)";
+    return "rgba(239,68,68,0.75)";
+  });
+  const borders = data.prices.map(p =>
+    p.time.slice(0, 13) === nowHour ? "rgba(37,99,235,1)" : "rgba(0,0,0,0)");
+
+  new Chart(document.getElementById("priceChart"), {
+    type: "bar",
+    data: {
+      labels: labels,
+      datasets: [{
+        data: prices,
+        backgroundColor: colors,
+        borderColor: borders,
+        borderWidth: 2,
+      }],
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: {
+        legend: { display: false },
+        tooltip: {
+          callbacks: {
+            title: items => items[0].label + " uur",
+            label: ctx => {
+              const p = data.prices[ctx.dataIndex];
+              return fmt(p.price_ct_kwh) + "  (" +
+                p.price_eur_mwh.toFixed(2).replace(".", ",") + " €/MWh)";
+            },
+          },
+        },
+      },
+      scales: {
+        y: {
+          title: { display: true, text: "ct/kWh" },
+          grid: { color: "rgba(0,0,0,0.06)" },
+        },
+        x: {
+          ticks: { maxRotation: 0, autoSkipPadding: 8 },
+          grid: { display: false },
+        },
+      },
+    },
+  });
+})();
+</script>
+</body>
+</html>
