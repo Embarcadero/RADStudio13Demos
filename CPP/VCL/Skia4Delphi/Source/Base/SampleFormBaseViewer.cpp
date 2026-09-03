@@ -511,8 +511,10 @@ void TfrmBaseViewer::ScrollBoxEraseBackground(TObject* ASender, const HDC ADC)
 				UpdateChessBitmap();
 			if (HWND(WindowFromDC(ADC)) == sbxContent->Handle) {
 				for (int i = 0; i < LScrollBox->ControlCount; i++) {
-					TRect LRect = LScrollBox->Controls[i]->BoundsRect;
-					ExcludeClipRect(ADC, LRect.Left, LRect.Top, LRect.Right, LRect.Bottom);
+					if (dynamic_cast<TSkCustomAnimatedControl*>(LScrollBox->Controls[i])) {
+						TRect LRect = LScrollBox->Controls[i]->BoundsRect;
+						ExcludeClipRect(ADC, LRect.Left, LRect.Top, LRect.Right, LRect.Bottom);
+					}
 				}
 				BitBlt(ADC, 0, 0, LScrollBox->Width, LScrollBox->Height, FChessBitmap->Canvas->Handle, 0, 0, SRCCOPY);
 				SelectClipRgn(ADC, HRGN(nullptr));

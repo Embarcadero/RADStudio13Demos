@@ -56,7 +56,7 @@ void __fastcall TfrmBase::btnBackClick(TObject* Sender)
 	// -   https://quality.embarcadero.com/browse/RSP-36959
 	// -
 	// - -----------------------------------------------------------------------
-	#if __BCPLUSPLUS__ > 0x0770
+	#if __BCPLUSPLUS__ > 0x0780
 		#warning Check if the issue has been fixed
 	#endif
 	// - -----------------------------------------------------------------------

@@ -2,7 +2,7 @@
 {                                                                        }
 {                              Skia4Delphi                               }
 {                                                                        }
-{ Copyright (c) 2021-2023 Skia4Delphi Project.                           }
+{ Copyright (c) 2021-2026 Skia4Delphi Project.                           }
 {                                                                        }
 { Use of this source code is governed by the MIT license that can be     }
 { found in the LICENSE file.                                             }
@@ -604,8 +604,11 @@ begin
         begin
           for I := 0 to LScrollBox.ControlCount-1 do
           begin
-            LRect := LScrollBox.Controls[I].BoundsRect;
-            ExcludeClipRect(ADC, LRect.Left, LRect.Top, LRect.Right, LRect.Bottom);
+            if LScrollBox.Controls[I] is TSkCustomAnimatedControl then
+            begin
+              LRect := LScrollBox.Controls[I].BoundsRect;
+              ExcludeClipRect(ADC, LRect.Left, LRect.Top, LRect.Right, LRect.Bottom);
+            end;
           end;
           BitBlt(ADC, 0, 0, LScrollBox.Width, LScrollBox.Height, FChessBitmap.Canvas.Handle, 0, 0, SRCCOPY);
           SelectClipRgn(ADC, HRGN(nil));

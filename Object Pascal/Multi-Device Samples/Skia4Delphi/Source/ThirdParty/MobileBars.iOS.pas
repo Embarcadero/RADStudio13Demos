@@ -2,7 +2,7 @@
 {                                                                        }
 {                               MobileBars                               }
 {                                                                        }
-{ Copyright (c) 2021-2023 MobileBars                                     }
+{ Copyright (c) 2021-2026 MobileBars                                     }
 { https://github.com/viniciusfbb/mobilebars                              }
 {                                                                        }
 { Use of this source code is governed by a MIT license that can be found }
@@ -231,7 +231,7 @@ function TMobileBarsServiceiOS.GetStatusBarOffset(const AForm: TCommonCustomForm
     LRttiProperty: TRttiProperty;
     LCocoaTouchWindowManager: TObject;
   begin
-    {$IF CompilerVersion > 36} // RAD Studio 12 Athens
+    {$IF CompilerVersion > 37} // RAD Studio 13 Florence
       {$MESSAGE WARN 'Check in file FMX.Platform.iOS.pas if the class TCocoaTouchWindowManager have already the property "StatusBarOffset: Single" and adjust the IFDEF'}
     {$ENDIF}
     LCocoaTouchWindowManager := TObject(FDefaultStatusBarService);

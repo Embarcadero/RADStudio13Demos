@@ -62,7 +62,7 @@ public:
 // -   https://quality.embarcadero.com/browse/RSP-36958
 // -
 // - ---------------------------------------------------------------------------
-#if __BCPLUSPLUS__ > 0x0770
+#if __BCPLUSPLUS__ > 0x0780
 	#warning Check if the issue has been fixed
 #endif
 // - ---------------------------------------------------------------------------
